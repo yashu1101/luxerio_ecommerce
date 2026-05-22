@@ -1,0 +1,115 @@
+.myorder-section {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 80px;
+  /* align-items: center; */
+}
+.myorder-container {
+  width: 100%;
+  max-width: 600px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 10px;
+  justify-content: center;
+}
+
+.myorder-heading-container {
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.myorder-link{
+  color: unset;
+  text-decoration: none;
+}
+.myorder-wrapper {
+    position: relative;
+  display: flex;
+  padding: 10px;
+  gap: 15px;
+  box-sizing: border-box;
+  background-color: white;
+}
+.myorder-wrapper-overlay::after{
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #d9d9d97f;
+}
+
+.myorder-image-container {
+  width: 100px;
+  position: relative;
+}
+.myorder-image-overlay {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  background-color: rgb(78 78 78 / 62%);
+  color: white;
+  left: 0;
+  bottom: 0;
+}
+
+.myorder-image {
+  width: 100%;
+}
+
+.myorder-detail {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.myorder-id {
+  color: #6a6a6a;
+}
+.myorder-totalprice {
+  font-weight: 600;
+}
+.myorder-status {
+  position: relative;
+  font-weight: 600;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+}
+
+.myorder-status-pending {
+  position: relative;
+  color: orange;
+}
+.myorder-status-shipped {
+  position: relative;
+  color: blue;
+}
+.myorder-status-delivered {
+  position: relative;
+  color: green;
+}
+.myorder-status-cancelled {
+  position: relative;
+  color: red;
+}
+@media (max-width: 480px) {
+  .myorder-section {
+    margin-top: 90px;
+  }
+  .myorder-image-container {
+    width: 60px;
+  }
+
+  .myorder-detail {
+    gap: 3px;
+  }
+}

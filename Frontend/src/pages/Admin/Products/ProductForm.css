@@ -1,0 +1,142 @@
+.pf-container {
+  min-height: 100vh;
+  padding: 20px;
+  background: #f5f5f5;
+}
+
+.pf-wrapper {
+  max-width: 800px;
+  margin: auto;
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+}
+
+.pf-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.pf-group {
+  margin-bottom: 20px;
+}
+
+.pf-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.pf-group input,
+.pf-group textarea,
+.pf-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+/* Specifications Section */
+.pf-specs-section {
+  margin: 20px 0;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+
+.pf-label-heading {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.pf-spec-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.pf-spec-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+}
+
+.pf-spec-input:focus {
+  border-color:var(--primary-color)
+}
+
+.pf-remove-spec {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.pf-add-spec-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.pf-add-spec-btn:hover {
+  background: #555;
+}
+
+.pf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.pf-preview {
+  margin-top: 10px;
+  max-width: 150px;
+  border-radius: 5px;
+}
+
+.pf-help {
+  font-size: 12px;
+  color: gray;
+}
+
+.pf-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.pf-add-btn {
+  background: #ff6b6b;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.pf-reset-btn {
+  background: #ddd;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}

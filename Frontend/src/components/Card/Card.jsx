@@ -1,0 +1,76 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Link } from "react-router-dom";
+
+import { useContext } from "react";
+import { WishlistContext } from "../../Context/WishlistContext";
+import { CartContext } from "../../Context/CartContext";
+
+import "./Card.css";
+import {
+  faCartShopping,
+  faHeart,
+  faStar,
+} from "@fortawesome/free-solid-svg-icons";
+export const Card = ({
+  productId,
+  src,
+  title,
+  rating,
+  price,
+  brand,
+  wishlist,
+  cart,
+}) => {
+  const { AddToWishlist,isInWishlist } = useContext(WishlistContext);
+  const { AddToCart,isInCart } = useContext(CartContext);
+  return (
+    <>
+      {" "}
+      <div className="card">
+        <FontAwesomeIcon
+          onClick={() => AddToWishlist(wishlist)}
+          className="card-wishlist-btn-icon-mobile"
+          icon={faHeart}
+        ></FontAwesomeIcon>
+
+        <Link to={`/view/${productId}`}>
+          {" "}
+          <img className="card-image" src={src} alt="img" />
+        </Link>
+        <div className="card-details">
+          <div className="card-sub-details">
+            <span className="product-brand">{brand}</span>
+            <span className="product-rating">
+              {rating}
+              <FontAwesomeIcon className="rating-icon" icon={faStar}>
+                {" "}
+              </FontAwesomeIcon>{" "}
+            </span>
+
+          </div>
+          <span className="product-title">{title}</span>
+
+          <span className="product-price">{`₹${price}`}</span>
+        </div>
+
+        <div className="card-overlay">
+          <button className="card-wishlist-btn">
+            <FontAwesomeIcon
+              className={`card-wishlist-btn-icon  ${isInWishlist(wishlist)&& 'card-wishlist-btn-icon-active'} `} 
+              onClick={() => AddToWishlist(wishlist)}
+              icon={faHeart}
+            ></FontAwesomeIcon>
+          </button>
+
+          <button className="card-cart-btn">
+            <FontAwesomeIcon
+              onClick={() => AddToCart(cart)}
+              className={`card-cart-btn-icon  ${isInCart(cart)&& 'card-cart-btn-icon-active'} `} 
+              icon={faCartShopping}
+            ></FontAwesomeIcon>
+          </button>
+        </div>
+      </div>
+    </>
+  );
+};

@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inter, sans-serif;
+ 
+}
+
+:root {
+  --text-color: black;
+  --font-family: 'Inter';
+ 
+    --primary-color: hsl(16, 100%, 62%);
+   
+
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+Link,
+a {
+  text-decoration: none;
+
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+
+}
+
+body {
+  background-color: #f5f8fe;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+}

@@ -1,0 +1,155 @@
+.admin-orders-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: inherit;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    padding: 30px 0;
+    gap: 10px;
+}
+
+.admin-orders-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.admin-orders-heading {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* buttons */
+
+
+
+.order-action-coll{
+    text-align: center !important;
+}
+
+.action-view-order-button {
+    /* color: #; */
+}
+
+.admin-orders-table-container {
+
+    width: 90%;
+    height: 450px;
+    overflow-x: auto;
+    /* Sirf horizontal scroll aayega */
+    overflow-y: hidden;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.admin-orders-table {
+    table-layout: auto;
+
+    width: 100%;
+    min-width: 1000px;
+
+    border-collapse: collapse;
+}
+
+.admin-order-table-row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.orders-table-heading {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.order-table-coll {
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+.order-id-coll {
+    width: 100px;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.order-address-coll {
+    width: 250px;
+    max-width: 250px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-status-coll {
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+.status-coll-text {
+    display: block;
+
+    text-align: center;
+    padding: 4px 3px;
+    max-width: 80px;
+    border-radius: 17px;
+    box-sizing: border-box;
+}
+
+.order-status-pending {
+    color: #fff7ed;
+    background: #c2410c;
+}
+
+
+.order-status-shipped {
+    color: #eff6ff;
+    background: #00bcd4;
+}
+
+.order-status-delivered {
+    color: #f0fdf4;
+    background: #07cf52;
+}
+
+.order-status-cancelled {
+    color: #fef2f2;
+    background: #ff1848;
+}
+
+.order-img-coll {
+    width: 70px;
+    display: flex;
+}
+
+.admin-order-thumbnail {
+    width: 100%;
+}
+
+.admin-orders-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    /* padding: 20px 0; */
+    box-sizing: border-box;
+}
+
+.admin-orders-pagination-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0px;
+    margin-top: 20px;
+}
+
+.pagination-button-icon {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    cursor: pointer;
+}

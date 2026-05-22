@@ -1,0 +1,40 @@
+.admin-main {
+
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    /* border: 2px solid green; */
+    /* background-color: var(--primary-color); */
+    /* background: linear-gradient(45deg, #42d3ff, #42faff); */
+}
+
+.admin-container {
+    /* display: flex; */
+    align-items: center;
+    width: 100%;
+    height: inherit;
+
+    /* padding-top: 10rem; */
+    /* border: 1px solid rgb(255, 68, 68); */
+
+}
+
+
+
+.admin-content {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    flex: 2;
+    padding: 0 30px;
+    overflow: hidden;
+    margin-top: 50px;
+    
+}
+
+.admin-products{
+    display: flex;
+    flex-direction: column;
+    /* gap: 10px; */
+    justify-content: center;
+}

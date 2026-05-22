@@ -1,0 +1,150 @@
+.auth {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-form-pannel {
+ background: white;
+    width: 100%;
+    height: 450px;
+    justify-content: center;
+    display: flex;
+    gap: 30px;
+    padding: 50px 30px;
+    box-sizing: border-box;
+    flex-direction: column;
+    max-width: 450px;
+    box-shadow: 0px 0px 30px #d0d0d04d;
+}
+
+.auth-logo-pannel {
+  position: relative;
+  background: rgb(3, 3, 3);
+  width: 100%;
+  height: 400px;
+  justify-content: center;
+  display: flex;
+  gap: 30px;
+  padding: 80px 30px;
+  box-sizing: border-box;
+  flex-direction: column;
+  max-width: 350px;
+  box-shadow: 0px 0px 30px #d0d0d04d;
+}
+
+.auth-logo {
+  font-size: 5rem;
+  color: white;
+}
+
+.auth-caption {
+  color: white;
+  position: absolute;
+  bottom: 153px;
+  left: 35px;
+
+  font-size: 0.6rem;
+  letter-spacing: 7px;
+  text-transform: uppercase;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 15px;
+  align-items: center;
+  padding: 10px 0;
+  justify-content: center;
+  width: 100%;
+  /* max-width: 400px; */
+  transition: all 0.3s linear;
+}
+
+.auth-form-field {
+  width: 100%;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  border: 1px solid #8080803b;
+  border-radius: 100px;
+  transition: all 0.3s linear;
+}
+
+.auth-form-field:focus {
+  /* border: none; */
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.579);
+  transition: all 0.3s linear;
+}
+
+.auth-form-button {
+  background: linear-gradient(45deg, var(--primary-color), #ffd648);
+  color: white;
+  width: 100%;
+  padding: 10px 0;
+  font-weight: 500;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* .auth-form-button::after{
+  position: absolute;
+  content: "";
+  left: 0;
+  height: 100%;
+  background-color: green;
+  top: 0;
+  width: 20%;
+} */
+
+.auth-form-button-animate {
+  background-position-x: 0;
+  animation: bgMove 1s ease infinite forwards;
+}
+
+@keyframes bgMove {
+  from {
+    background-position-x: 0;
+
+  }
+
+  to {
+    background-position-x: 290px;
+
+  }
+}
+
+.forget-pass {
+  width: 100%;
+  text-align: right;
+  font-size: 0.8rem;
+  color: maroon;
+  cursor: pointer;
+}
+
+.signup-text,
+.login-text {
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+@media (max-width:480px) {
+  .auth-logo-pannel {
+    display: none;
+  }
+
+  .auth-form-pannel {
+    height: 100vh;
+  }
+}

@@ -1,0 +1,44 @@
+.payment-method-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* max-width: 400px; */
+    background: white;
+    padding: 30px 15px ;
+    gap: 15px;
+}
+
+.payment-methods{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+
+}
+
+.payment-method-wrapper{
+    display: flex;
+   justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 20px 15px;
+    outline: 1px solid #8080803b;
+    border-radius: 100px;
+
+}
+.payment-method:focus{
+    color: red;
+    background-color: red;
+}
+
+
+.payment-proceed-button{
+    width: 100px;
+    border: 1px solid var(--primary-color);
+    padding: 10px 0px;
+    background:none;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+    font-weight: 500;
+    border-radius: 100px;
+}

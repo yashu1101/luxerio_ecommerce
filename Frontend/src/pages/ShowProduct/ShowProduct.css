@@ -1,0 +1,106 @@
+.product-section {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 70px 0 0px 0;
+  width: 100%;
+  /* height: 100vh; */
+}
+
+.products {
+  display: grid;
+  width: 100%;
+  height: 600px;
+  overflow-y: scroll;
+  max-height: 600px;
+  padding: 15px 20px 0px 20px;
+  box-sizing: border-box;
+
+  grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
+
+  gap: 20px;
+  place-content: baseline;
+  scrollbar-width: none;
+}
+
+.pagination-button-container {
+  display: flex;
+  background: white;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 15px;
+}
+
+@media (max-width: 768px) {
+  .products {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
+  }
+
+  .filter-container {
+    display: none;
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    min-height: 400px;
+    height: 100%;
+    position: fixed;
+    top: 55px;
+    align-self: flex-start;
+    box-shadow: none;
+    padding: 0 20px;
+    z-index: 6;
+    /* border-radius: 5px; */
+    box-shadow: 1px 1px 10px #80808021;
+  }
+
+  .filter-toggle-button {
+    display: block;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    padding: 15px 15px;
+    box-sizing: border-box;
+    background: rgb(98, 98, 98);
+
+    border-radius: 100px;
+    box-shadow: 1px 1px 15px #8080801f;
+    cursor: pointer;
+  }
+
+  .filter-toggle-icon {
+    height: 20px;
+    width: 20px;
+    color: white;
+  }
+}
+
+@media (max-width: 480px) {
+  .products {
+    display: grid;
+    padding: 30px 0;
+    /* padding: 10px; */
+    box-sizing: border-box;
+    /* margin: -80px 0; */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 150px));
+
+    gap: 10px;
+  }
+
+  .filter-container {
+    display: none;
+    width: 100%;
+    min-height: 400px;
+    height: 100%;
+    position: fixed;
+    top: 90px;
+    align-self: flex-start;
+    box-shadow: none;
+    padding: 0 20px;
+    z-index: 6;
+    /* border-radius: 5px; */
+  }
+}

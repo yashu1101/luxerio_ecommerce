@@ -1,0 +1,51 @@
+.address-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    width: 100%;
+    /* max-width: 400px; */
+    padding: 15px;
+    border-radius: 10px;
+
+}
+
+.address-title {
+    margin: 15px;
+}
+
+.address-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* max-width: 400px; */
+    gap: 15px;
+    padding: 10px;
+}
+
+.address-field {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    justify-content: left;
+}
+
+.address-input-field {
+  width: 100%;
+    padding: 15px 10px;
+    box-sizing: border-box;
+    border: 1px solid #8080803b;
+    /* border-radius: 100px; */
+    transition: all 0.3s linear;
+}
+
+.save-address-button {
+    width: 100px;
+    border: 1px solid var(--primary-color);
+    padding: 10px 0px;
+    background:none;
+    color: var(--primary-color);
+    letter-spacing: 1px;
+    font-weight: 500;
+    border-radius: 100px;
+}

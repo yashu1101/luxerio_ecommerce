@@ -1,0 +1,381 @@
+/* ─────────────────────────────────────
+   OrderDetails.css
+───────────────────────────────────── */
+
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+:root {
+  --bg: #f0f2f7;
+  --surface: #ffffff;
+  --border: #e4e8f0;
+  --text: #111827;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-light: #eff6ff;
+  --radius: 14px;
+  --shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+/* ── Page wrapper ── */
+.user-od-wrapper {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 110px 20px 64px;
+}
+
+.od-container {
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Header ── */
+.od-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.od-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.od-order-id {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+/* ── Status control (dropdown + button) ── */
+.od-status {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+.od-status-view{
+  text-transform: capitalize;
+}
+
+.od-status-update {
+  padding: 5px 10px;
+  border: none;
+  font-size: 0.8rem;
+  border-radius: 29px;
+  color: white;
+  background: #ff0c0c;
+  cursor: pointer;
+}
+
+.status-pending {
+  color: #c2410c;
+}
+
+.status-shipped {
+  color: #1d4ed8;
+}
+
+.status-delivered {
+  color: #15803d;
+}
+
+.status-cancelled {
+  color: #b91c1c;
+}
+
+.od-save-btn:hover:not(:disabled) {
+  background: rgba(255, 127, 80, 0.781);
+}
+
+.od-save-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.od-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.od-save-btn.saving {
+  background: var(--muted);
+}
+
+.od-save-btn.saved {
+  background: #16a34a;
+}
+
+/* ── Card base ── */
+.od-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.od-card-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+
+/* ── Top grid ── */
+.od-grid-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+/* ── Customer card ── */
+.od-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.od-user-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 5px;
+}
+
+.od-user-email {
+  font-size: 13px;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+/* ── Timeline ── */
+.od-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.od-tl-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.od-tl-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.dot-blue {
+  background: var(--accent);
+}
+
+.dot-green {
+  background: #16a34a;
+}
+
+.od-tl-line {
+  width: 2px;
+  height: 22px;
+  background: var(--border);
+  margin: 5px 0 5px 4.5px;
+}
+
+.od-tl-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+.od-tl-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Payment & address card ── */
+.od-info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.od-info-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.od-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+.od-address {
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ── Items table card ── */
+.od-items-card {
+  overflow: hidden;
+}
+
+.od-table-wrapper {
+  overflow-x: auto;
+}
+
+.od-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.od-table thead tr {
+  background: var(--bg);
+}
+
+.od-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+}
+
+.od-table td {
+  padding: 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.od-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.od-table tbody tr:hover {
+  background: #fafbff;
+}
+
+.od-td-num {
+  color: var(--muted);
+  font-size: 12px;
+  width: 36px;
+}
+
+.od-td-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.od-item-emoji {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.od-td-qty {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.od-td-price {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* ── Total ── */
+.od-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 18px;
+  margin-top: 6px;
+  border-top: 2px solid var(--border);
+}
+
+.od-total-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.od-total-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* ── Responsive ── */
+@media (max-width: 780px) {
+  .od-grid-top {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .od-grid-top {
+    grid-template-columns: 1fr;
+  }
+
+  .od-order-id {
+    font-size: 22px;
+  }
+
+  .od-total-value {
+    font-size: 18px;
+  }
+
+  .od-card {
+    padding: 18px;
+  }
+
+  .od-table th,
+  .od-table td {
+    padding: 10px;
+  }
+
+  .od-item-emoji {
+    display: none;
+  }
+
+  .od-status-control {
+    width: 100%;
+  }
+}
