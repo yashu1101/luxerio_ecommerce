@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./productForm.css";
+import "./ProductForm.css";
 import { api } from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
 
