@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "http://localhost:1101/api/",
+    baseURL: "https://luxerio-backend.onrender.com/api/",
     withCredentials: true,
 });
