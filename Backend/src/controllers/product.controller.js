@@ -199,7 +199,7 @@ export const addReview = async (req, res) => {
 
     const product = await Product.findById(productId)
     const reviewExist = product.reviews.find((r) => r.user.toString() === req.user._id.toString())
-    if (reviewExist) return res.status(400).json({ message: "Already reviewd." })
+    if (reviewExist) return res.status(400).json({ message: "Already reviewd.", isReviewed: true })
 
 
     const newReview = {
@@ -215,7 +215,8 @@ export const addReview = async (req, res) => {
 
 
     res.status(200).json({
-      message: "Review added."
+      message: "Review added.",
+      isReviewed: true
     })
 
   } catch (error) {
