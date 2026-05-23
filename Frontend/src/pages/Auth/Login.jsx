@@ -8,7 +8,7 @@ export const Login = () => {
   const [AuthEmail, setAuthEmail] = useState("");
   const [AuthPassword, setAuthPassword] = useState("");
 
-  const { UserLogin, user, updateMessage, buttonAnimation, loading } =
+  const { UserLogin, user, updateMessage, loginButtonDisabled, loading } =
     useContext(AuthContext);
 
   const LoginFormHandler = async (e) => {
@@ -65,8 +65,8 @@ export const Login = () => {
             />
 
             <button
-              className={`auth-form-button ${
-                buttonAnimation && "auth-form-button-animate"
+              className={`auth-form-login-button ${
+                loginButtonDisabled && "auth-form-login-button-disabled"
               }`}>
               LOGIN
             </button>

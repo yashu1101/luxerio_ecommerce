@@ -4,37 +4,38 @@ import { useNavigate } from "react-router-dom";
 import { PopupBox } from "../components/PopupBox/PopupBox";
 export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
-
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [buttonAnimation, setButtonAnimation] = useState(false);
+  const [loginButtonDisbaled, setLoginButtonDisbaled] = useState(false);
   // auth update message
   const [updateMessage, setUpdateMessage] = useState({
     message: "",
     color: "",
     type: null,
   });
-  // logout 
+  // logout
   const [logoutPopup, setLogoutPopup] = useState(false);
   const [isLoggedOut, setIsLoggedOut] = useState(false);
-
-
 
   // **********SignUp Form Handler**********
   const UserSignup = async (username, email, password) => {
     try {
       const formdata = { username: username, email: email, password: password };
       const res = await api.post("auth/register", formdata);
-      setUpdateMessage({ message: res?.data?.message, color: "green", type: "signup" });
-     
+      setUpdateMessage({
+        message: res?.data?.message,
+        color: "green",
+        type: "signup",
+      });
+
       return { success: true };
     } catch (error) {
       setUpdateMessage({
         message: error.response.data.message || "Somthing went wrong!",
         color: "red",
-        type: "signup"
+        type: "signup",
       });
-      
+
       console.log(error.response.data.message || "Somthing went wrong!");
     }
   };
@@ -43,23 +44,42 @@ export const AuthProvider = ({ children }) => {
     try {
       const formData = { email, password };
       const res = await api.post("auth/login", formData);
-      console.log(res?.data?.message);
-      setUpdateMessage({ message: res?.data?.message, color: "green", type: "login" });
-     
-      setButtonAnimation(true);
-      setTimeout(() => {
-        setButtonAnimation(false);
-        GetMe();
-        
+
+      setUpdateMessage({
+        message: res?.data?.message,
+        color: "green",
+        type: "login",
+      });
+
+      setInterval(() => {
+        setUpdateMessage({
+          message: "",
+          color: "",
+          type: null,
+        });
       }, 3000);
+
+      setLoginButtonDisbaled(true);
+
+      GetMe();
     } catch (error) {
       setUpdateMessage({
         message: error.response.data.message || "Somthing went wrong!",
         color: "red",
-        type: "login"
+        type: "login",
       });
-     
+
+      setInterval(() => {
+        setUpdateMessage({
+          message: "",
+          color: "",
+          type: null,
+        });
+      }, 3000);
+
       console.log(error.response.data.message || "Somthing went wrong!");
+    } finally {
+      setLoginButtonDisbaled(false);
     }
   };
   // ***********Get loggedIn user**************
@@ -85,7 +105,6 @@ export const AuthProvider = ({ children }) => {
     GetMe();
   }, []);
 
-
   // ***********User Logout**************
   const UserLogout = async () => {
     try {
@@ -96,14 +115,13 @@ export const AuthProvider = ({ children }) => {
       setTimeout(() => {
         setLogoutPopup(false);
         setUser(null);
-       
       }, 3000);
       return {
         status: true,
       };
     } catch (error) {
       console.log(error?.response?.data?.message || "Somthing went wrong!");
-       return {
+      return {
         status: false,
       };
     }
@@ -116,10 +134,10 @@ export const AuthProvider = ({ children }) => {
         UserLogout,
         logoutPopup,
         isLoggedOut,
-       
+
         setUpdateMessage,
         user,
-        buttonAnimation,
+        loginButtonDisbaled,
         updateMessage,
         loading,
       }}>

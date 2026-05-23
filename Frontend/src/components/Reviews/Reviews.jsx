@@ -13,7 +13,11 @@ export const Reviews = ({ reviews, productId }) => {
     rating: "",
   });
 
+
+
   // add review
+
+
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +27,8 @@ export const Reviews = ({ reviews, productId }) => {
         comment: formData.comment,
         rating: formData.rating,
       });
+      console.log(res.data.isDisabled);
+      setIsDisabled(res.data.isDisabled);
 
       setReviewForm(false);
     } catch (error) {
@@ -52,16 +58,17 @@ export const Reviews = ({ reviews, productId }) => {
             </div>
           );
         })}
-       {
-        user !== null && <div className="add-review-button-conatiner">
-          <button
-            className="add-review"
-            onClick={() => {
-              setReviewForm(!reviewForm);
-            }}>
-            Add Review
-          </button>
-        </div>}
+        {user !== null && (
+          <div className="add-review-button-conatiner">
+            <button
+              className="add-review"
+              onClick={() => {
+                setReviewForm(!reviewForm);
+              }}>
+              Add Review
+            </button>
+          </div>
+        )}
       </div>
 
       {/* add review form */}
@@ -90,6 +97,7 @@ export const Reviews = ({ reviews, productId }) => {
                 type="number"
                 min="1"
                 max="5"
+                step="0.1"
                 name="rating"
                 placeholder="rating"
                 onChange={(e) => {

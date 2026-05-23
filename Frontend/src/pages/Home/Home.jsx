@@ -6,8 +6,19 @@ import { Carousel } from "../../components/Carousel/Carousel";
 import { Loader } from "../../components/Loader/Loader";
 import { Filter } from "../../components/Filter/Filter";
 import { Footer } from "../../components/Footer/Footer";
+import { useContext } from "react";
+import { ProductContext } from "../../Context/ProductsContext";
 
 export const Home = () => {
+const {loading} = useContext(ProductContext)
+
+// Loading
+
+if(loading){
+  return <Loader height={'100vh'} ></Loader>
+} 
+  
+
   return (
     <>
       <HeroSection></HeroSection>

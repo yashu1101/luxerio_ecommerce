@@ -11,9 +11,9 @@
 }
 
 .typing-loader span {
-  width: 10px;
-  height: 10px;
-  background-color: gray;
+  width: 7px;
+  height: 7px;
+  background-color: rgb(128, 128, 128);
   border-radius: 50%;
   animation: bounce 0.6s infinite alternate;
 }

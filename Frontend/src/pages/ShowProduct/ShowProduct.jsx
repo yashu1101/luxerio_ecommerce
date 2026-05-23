@@ -35,11 +35,11 @@ export const ShowProduct = () => {
       <div className="product-section">
         <Filter category={categoryName}></Filter>
 
-        <div className="products">
-          {loading ? (
-            <Loader  height={'100%'}></Loader>
-          ) : (
-            products?.map((product) => {
+        {loading ? (
+          <Loader height={"80vh"}></Loader>
+        ) : (
+          <div className="products">
+            {products?.map((product) => {
               return (
                 <div className="product" key={product?._id}>
                   <Card
@@ -65,9 +65,9 @@ export const ShowProduct = () => {
                   />
                 </div>
               );
-            })
-          )}
-        </div>
+            })}
+          </div>
+        )}
         <div className="pagination-button-container">
           <Pagination
             currentPage={currentPage}
