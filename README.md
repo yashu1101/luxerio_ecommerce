@@ -25,6 +25,7 @@ The goal of this project was to build a realistic ecommerce platform while learn
 - Forgot Password
 - OTP Based Password Reset
 - Change Password
+- AI Chat Support
 
 ---
 
