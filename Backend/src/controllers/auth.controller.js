@@ -84,17 +84,18 @@ export const userLogin = async (req, res) => {
         // jwt token store in cookie
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "Strict",
-            // maxAge: 1000 * 60 * 60
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+            maxAge: 5 * 24 * 60 * 60 * 1000, // 5 days
+
         })
             .status(200)
             .json({
                 message: "Login successful",
-               
+
             });
 
-            
+
 
 
     } catch (error) {

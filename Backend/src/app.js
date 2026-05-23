@@ -21,7 +21,10 @@ const app = express()
 
 // middleware
 app.use(cors({
-    origin: 'https://luxerio.vercel.app',
+    origin: [
+        'https://luxerio.vercel.app',
+        'http://localhost:5173'
+    ],
 
     credentials: true,
 }))
