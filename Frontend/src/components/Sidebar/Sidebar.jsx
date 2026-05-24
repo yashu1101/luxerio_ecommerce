@@ -21,7 +21,7 @@ import starImage from "../../assets/icons/stars.png";
 import { useEffect } from "react";
 
 export const Sidebar = ({ isSidebar, setIsOpen }) => {
-  const { UserLogout, message, user, logoutPopup } = useContext(AuthContext);
+  const { UserLogout, message, user } = useContext(AuthContext);
 
  
 
@@ -51,10 +51,7 @@ export const Sidebar = ({ isSidebar, setIsOpen }) => {
                 icon={faArrowRightFromBracket}></FontAwesomeIcon>
             </span>
 
-            <div
-              className={`logout-popup ${logoutPopup ? "logout-popup-show " : "logout-popup-hide"}`}>
-              <span>Logged Out✅</span>
-            </div>
+           
           </li>
         )}
         <li className="sidebar-item">

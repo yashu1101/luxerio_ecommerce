@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     type: null,
   });
   // logout
-  const [logoutPopup, setLogoutPopup] = useState(false);
+ 
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   // **********SignUp Form Handler**********
@@ -110,12 +110,10 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post("auth/logout");
       console.log(res.data.message);
-      setLogoutPopup(true);
+     
       setIsLoggedOut(true);
-      setTimeout(() => {
-        setLogoutPopup(false);
-        setUser(null);
-      }, 3000);
+     
+      setUser(null);
       return {
         status: true,
       };
@@ -132,7 +130,7 @@ export const AuthProvider = ({ children }) => {
         UserSignup,
         UserLogin,
         UserLogout,
-        logoutPopup,
+      
         isLoggedOut,
 
         setUpdateMessage,
