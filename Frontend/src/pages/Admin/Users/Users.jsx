@@ -108,26 +108,28 @@ export const Users = () => {
                     </span>
                   </td>
                   <td className="user-table-coll user-registered-at-coll ">
-                    {DateFormator(user?.createdAt) || "N/A" }
+                    {DateFormator(user?.createdAt) || "N/A"}
                   </td>
 
                   <td className="user-table-coll user-action-coll ">
-                    {" "}
-                    {user?.role === "admin" ? (
+                   
+                    <div className="user-action-container">
+                      {user?.role === "admin" ? (
+                        <FontAwesomeIcon
+                          onClick={() => updateRole(user?._id)}
+                          className="admin-user-action-button action-edit"
+                          icon={faUserGear}></FontAwesomeIcon>
+                      ) : (
+                        <FontAwesomeIcon
+                          onClick={() => updateRole(user?._id)}
+                          className="admin-user-action-button action-edit"
+                          icon={faUser}></FontAwesomeIcon>
+                      )}{" "}
                       <FontAwesomeIcon
-                        onClick={() => updateRole(user?._id)}
-                        className="admin-user-action-button action-edit"
-                        icon={faUserGear}></FontAwesomeIcon>
-                    ) : (
-                      <FontAwesomeIcon
-                        onClick={() => updateRole(user?._id)}
-                        className="admin-user-action-button action-edit"
-                        icon={faUser}></FontAwesomeIcon>
-                    )}{" "}
-                    <FontAwesomeIcon
-                      onClick={() => deleteUser(user?._id)}
-                      className="admin-user-action-button action-delete"
-                      icon={faTrash}></FontAwesomeIcon>{" "}
+                        onClick={() => deleteUser(user?._id)}
+                        className="admin-user-action-button action-delete"
+                        icon={faTrash}></FontAwesomeIcon>{" "}
+                    </div>
                   </td>
                 </tr>
               );
@@ -135,7 +137,6 @@ export const Users = () => {
           </tbody>
         </table>
       </div>
-     
     </div>
   );
 };

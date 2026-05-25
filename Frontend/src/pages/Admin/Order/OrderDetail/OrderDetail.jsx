@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { api } from "../../../../api/axios";
 import "./OrderDetail.css";
 import { DateFormator } from "../../../../utility/DateFormator";
+import { Loader } from "../../../../components/Loader/Loader";
 
 export function OrderDetail() {
   const [status, setStatus] = useState("");
@@ -11,6 +12,7 @@ export function OrderDetail() {
   const [orderData, setOrderData] = useState({});
   const [message, setMessage] = useState("");
   const [statusValue, setStatusValue] = useState("");
+  const [orderDataLoading, setOrderDataLoading] = useState(false);
   const { orderId } = useParams();
 
   const handleStatusChange = (e) => {
@@ -21,10 +23,13 @@ export function OrderDetail() {
 
   const orderDetail = async () => {
     try {
+      setOrderDataLoading(true);
       const res = await api.get(`orders/view/${orderId}`);
       setOrderData(res?.data?.order);
     } catch (error) {
       console.error(error.response.data.message || "Something went wrong!");
+    } finally {
+      setOrderDataLoading(false);
     }
   };
 
@@ -66,8 +71,9 @@ export function OrderDetail() {
     setSaved(true);
   };
 
-  
-  return (
+  return orderDataLoading ? (
+    <Loader height={"100dvh"}></Loader>
+  ) : (
     <div className="od-wrapper">
       <div className="od-container">
         <div className="od-header">
@@ -82,19 +88,19 @@ export function OrderDetail() {
               className={`od-status-select-wrap status-${status.toLowerCase()}`}>
               <span className="od-status-dot" />
               <select
-                className={`od-status-select ${orderData?.status === "pending"
-                  ? "status-pending"
-                  : orderData?.status === "shipped"
-                    ? "status-shipped"
-                    : orderData?.status === "delivered"
-                      ? "status-delivered"
-                      : orderData?.status === "cancelled"
-                        ? "status-cancelled"
-                        : ""}`}
+                className={`od-status-select ${
+                  orderData?.status === "pending"
+                    ? "status-pending"
+                    : orderData?.status === "shipped"
+                      ? "status-shipped"
+                      : orderData?.status === "delivered"
+                        ? "status-delivered"
+                        : orderData?.status === "cancelled"
+                          ? "status-cancelled"
+                          : ""
+                }`}
                 value={orderData?.status}
-                onChange={handleOnChange}
-              
-                >
+                onChange={handleOnChange}>
                 <option value="pending">Pending</option>
                 <option value="shipped">Shipped</option>
                 <option value="delivered">Delivered</option>

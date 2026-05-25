@@ -6,8 +6,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [loginButtonDisbaled, setLoginButtonDisbaled] = useState(false);
-  const [signupButtonDisbaled, setSignupButtonDisbaled] = useState(false);
+  const [loginButtonDisabled, setLoginButtonDisabled] = useState(false);
+  const [signupButtonDisabled, setSignupButtonDisabled] = useState(false);
   // auth update message
   const [updateMessage, setUpdateMessage] = useState({
     message: "",
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   const UserSignup = async (username, email, password) => {
     try {
       const formdata = { username: username, email: email, password: password };
-      setSignupButtonDisbaled(true);
+      setSignupButtonDisabled(true);
       const res = await api.post("auth/register", formdata);
       setUpdateMessage({
         message: res?.data?.message,
@@ -40,14 +40,14 @@ export const AuthProvider = ({ children }) => {
 
       console.log(error.response.data.message || "Somthing went wrong!");
     } finally {
-      setSignupButtonDisbaled(false);
+      setSignupButtonDisabled(false);
     }
   };
   // **********Login Form Handler**********
   const UserLogin = async (email, password) => {
     try {
+      setLoginButtonDisabled(true);
       const formData = { email, password };
-      setLoginButtonDisbaled(true);
       const res = await api.post("auth/login", formData);
 
       setUpdateMessage({
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
         type: "login",
       });
 
-      setInterval(() => {
+      setTimeout(() => {
         setUpdateMessage({
           message: "",
           color: "",
@@ -72,7 +72,7 @@ export const AuthProvider = ({ children }) => {
         type: "login",
       });
 
-      setInterval(() => {
+      setTimeout(() => {
         setUpdateMessage({
           message: "",
           color: "",
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
       console.log(error.response.data.message || "Somthing went wrong!");
     } finally {
-      setLoginButtonDisbaled(false);
+      setLoginButtonDisabled(false);
     }
   };
   // ***********Get loggedIn user**************
@@ -138,8 +138,8 @@ export const AuthProvider = ({ children }) => {
 
         setUpdateMessage,
         user,
-        loginButtonDisbaled,
-        signupButtonDisbaled,
+        loginButtonDisabled,
+        signupButtonDisabled  ,
         updateMessage,
         loading,
       }}>

@@ -86,19 +86,7 @@
 }
 
 .auth-form-signup-button {
-  background: linear-gradient(45deg, var(--primary-color), #ffd648);
-  color: white;
-  width: 100%;
-  padding: 10px 0;
-  font-weight: 500;
-  box-sizing: border-box;
-  border: none;
-  border-radius: 100px;
-  position: relative;
-  overflow: hidden;
-}
-.auth-form-login-button {
-  background: linear-gradient(45deg, var(--primary-color), #ffd648);
+  background: var(--primary-color);
   color: white;
   width: 100%;
   padding: 10px 0;
@@ -110,6 +98,30 @@
   overflow: hidden;
   transition: all 0.3s ease;
 }
+.auth-form-signup-button:hover {
+  background: #ff713d7a;
+  transition: all 0.3s ease;
+  
+}
+.auth-form-login-button {
+  background: var(--primary-color);
+  color: white;
+  width: 100%;
+  padding: 10px 0;
+  font-weight: 500;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 100px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.auth-form-login-button:hover {
+  background: #ff713d7a;
+  transition: all 0.3s ease;
+}
+
+
 .auth-form-login-button-disabled {
  opacity: 0.5;
  pointer-events: none;

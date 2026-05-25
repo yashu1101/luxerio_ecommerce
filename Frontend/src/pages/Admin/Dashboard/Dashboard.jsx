@@ -19,12 +19,15 @@ export const Dashboard = () => {
   const [totalOrder, setTotalOrder] = useState("");
   const [totalRevenue, setTotalRevenue] = useState("");
 
+
+  const [dashboardLoading, setDashboardLoading] = useState(false)
   const {user,loadind} = useContext(AuthContext)
 
 
 //   get dashboard data 
   const getDashboardData = async () => {
     try {
+      setDashboardLoading(true)
       const res = await api.get("dashboard/data");
       setTotalProduct(res?.data?.totalProduct);
       setTotalCategory(res?.data?.totalCategory);
@@ -33,6 +36,8 @@ export const Dashboard = () => {
       setTotalRevenue(res?.data?.totalRevenue);
     } catch (error) {
       console.log(error.response.data.message || "Somthing went wrong!");
+    }finally{
+      setDashboardLoading(false)
     }
   };
 

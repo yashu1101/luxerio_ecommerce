@@ -38,6 +38,11 @@
     margin: 0 2px;
 }
 
+.user-action-container{
+    display: flex;
+    gap: 5px;
+}
+
 .action-edit {
     color: var(--primary-color);
 }

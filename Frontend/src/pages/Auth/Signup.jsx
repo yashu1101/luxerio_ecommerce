@@ -9,7 +9,7 @@ export const Signup = () => {
   const [AuthEmail, setAuthEmail] = useState("");
   const [AuthPassword, setAuthPassword] = useState("");
 
-  const { UserSignup, updateMessage, setUpdateMessage, signupButtonDisbaled } =
+  const { UserSignup, updateMessage, setUpdateMessage, signupButtonDisabled } =
     useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export const Signup = () => {
             />
 
             <button
-              className={`auth-form-signup-button ${signupButtonDisbaled ? "auth-form-signup-button-disabled" : ""}`}>
+              className={`auth-form-signup-button ${signupButtonDisabled ? "auth-form-signup-button-disabled" : ""}`}>
               SIGNUP
             </button>
 
