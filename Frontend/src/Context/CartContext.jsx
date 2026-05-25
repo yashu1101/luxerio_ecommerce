@@ -4,21 +4,20 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
   const [cartPopup, setCartPopup] = useState("");
   const [cart, setCart] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingCart, setLoadingCart] = useState(false);
 
   // Fetch cart items
   const getCartItems = async () => {
     try {
-      setLoading(true);
+      setLoadingCart(true);
       const res = await api.get("cart");
       setCart(res?.data?.products);
     } catch (error) {
       setError(error.response.data.message);
     } finally {
-      setLoading(false);
+      setLoadingCart(false);
     }
   };
 
@@ -35,13 +34,13 @@ export const CartProvider = ({ children }) => {
 
   const AddToCart = async (productId) => {
     try {
-      setLoading(true);
+      setLoadingCart(true);
       const res = await api.post("cart", { productId });
       setMessage(res.data.message);
     } catch (error) {
       setError(error.response.data.message);
     } finally {
-      setLoading(false);
+      setLoadingCart(false);
     }
   };
   // increase cart item quantity
@@ -71,15 +70,13 @@ export const CartProvider = ({ children }) => {
 
   const RemoveFromCart = async (productId) => {
     try {
-      setLoading(true);
+      
       const res = await api.delete(`cart/${productId}`);
       setMessage(res.data.message);
       getCartItems();
     } catch (error) {
       setError(error.response.data.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
   return (
     <CartContext.Provider
@@ -88,12 +85,13 @@ export const CartProvider = ({ children }) => {
         message,
         error,
         cart,
+        getCartItems,
         AddToCart,
         RemoveFromCart,
         decreaseQuantity,
         increaseQuantity,
         isInCart,
-        loading
+        loadingCart
       }}>
       {children}
     </CartContext.Provider>

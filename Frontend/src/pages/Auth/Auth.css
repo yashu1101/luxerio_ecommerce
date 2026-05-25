@@ -85,7 +85,7 @@
   transition: all 0.3s linear;
 }
 
-.auth-form-button {
+.auth-form-signup-button {
   background: linear-gradient(45deg, var(--primary-color), #ffd648);
   color: white;
   width: 100%;
@@ -111,6 +111,11 @@
   transition: all 0.3s ease;
 }
 .auth-form-login-button-disabled {
+ opacity: 0.5;
+ pointer-events: none;
+ transition: all 0.3s ease;
+}
+.auth-form-signup-button-disabled {
  opacity: 0.5;
  pointer-events: none;
  transition: all 0.3s ease;

@@ -9,29 +9,22 @@ import { api } from "../../api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../Context/AuthContext";
+import { Loader } from "../../components/Loader/Loader";
 
 export const Wishlist = () => {
-  const { wishlistItem, removeWishlistItem, message } =
+  const { wishlistItem, removeWishlistItem, loadingWishlist, getWishlistItem } =
     useContext(WishlistContext);
   const { user,loading } = useContext(AuthContext);
   const { popup } = useContext(WishlistContext);
   const { AddToCart, cartPopup } = useContext(CartContext);
-  const [items, setItems] = useState([]);
-  const [error, setError] = useState("");
+
+  // const [loadingWishlist, setLoadingWishlist] = useState(false);
   const navigate = useNavigate();
 
-  // api for get data from wishlist
-  const getWishlist = async () => {
-    try {
-      const res = await api.get("wishlist");
-      setItems(res.data.products);
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  };
+
 
   useEffect(() => {
-    getWishlist();
+    getWishlistItem();
   }, []);
 
   // Redirect to login page if user not logged In.
@@ -42,12 +35,15 @@ export const Wishlist = () => {
     }
   }, [user, loading, navigate]);
 
+  // Loading
+if(loadingWishlist) return <Loader height="100dvh" />
+
   return (
     <>
       <div className="wishlist-section">
         <div className="wishlist-container">
           <div className="cart-heading-container">
-            {items.length > 0 ? (
+            {wishlistItem?.length > 0 ? (
               <h3 className="cart-heading">Wishlist Items</h3>
             ) : (
               <div className="cart-empty-text-container">
@@ -58,7 +54,7 @@ export const Wishlist = () => {
               </div>
             )}
           </div>
-          {items.map((item) => (
+          {wishlistItem?.map((item) => (
             <div className="wishlist-item" key={item._id}>
               <div className="wishlist-card-image-container">
                 <Link to={`/view/${item._id}`}>

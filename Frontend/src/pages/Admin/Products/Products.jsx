@@ -20,10 +20,8 @@ export const Products = () => {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPage, setTotalPage] = useState(1)
-  
- 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
 
   const { deleteProduct, message } = useContext(ProductContext);
   console.log(currentPage);
@@ -64,8 +62,6 @@ export const Products = () => {
     navigate(`/admin/products/update/${productId}`);
   };
 
- 
-
   //   Render product card
   return (
     <div className="admin-products-container">
@@ -77,14 +73,14 @@ export const Products = () => {
       </div>
       <div className="admin-products-table-container">
         <table className="admin-products-table">
-            {
-              loading && <Loader></Loader>
-            }
+          {loading && <Loader></Loader>}
           <thead>
             <tr>
               <th className="products-table-heading">Image</th>
               <th className="products-table-heading">Title</th>
-              <th className="products-table-heading">Category</th>
+              <th className="products-table-heading product-category-heading">
+                Category
+              </th>
               <th className="products-table-heading">Price</th>
               <th className="products-table-heading">Stock</th>
               <th className="products-table-heading">Action</th>
@@ -117,19 +113,20 @@ export const Products = () => {
                     {product?.stock}
                   </td>
                   <td className="product-table-coll product-action-coll">
-                    {" "}
-                    <FontAwesomeIcon
-                      onClick={() => viewProduct(product._id)}
-                      className="admin-product-action-button action-view-product"
-                      icon={faEye}></FontAwesomeIcon>{" "}
-                    <FontAwesomeIcon
-                      onClick={() => updateProductForm(product._id)}
-                      className="admin-product-action-button action-edit-product"
-                      icon={faEdit}></FontAwesomeIcon>{" "}
-                    <FontAwesomeIcon
-                      onClick={() => deleteProduct(product._id)}
-                      className="admin-product-action-button action-delete-product"
-                      icon={faTrash}></FontAwesomeIcon>{" "}
+                    <div className="product-action-container">
+                      <FontAwesomeIcon
+                        onClick={() => viewProduct(product._id)}
+                        className="admin-product-action-button action-view-product"
+                        icon={faEye}></FontAwesomeIcon>{" "}
+                      <FontAwesomeIcon
+                        onClick={() => updateProductForm(product._id)}
+                        className="admin-product-action-button action-edit-product"
+                        icon={faEdit}></FontAwesomeIcon>{" "}
+                      <FontAwesomeIcon
+                        onClick={() => deleteProduct(product._id)}
+                        className="admin-product-action-button action-delete-product"
+                        icon={faTrash}></FontAwesomeIcon>
+                    </div>
                   </td>
                 </tr>
               );
@@ -138,7 +135,10 @@ export const Products = () => {
         </table>
       </div>
       <div className="admin-products-pagination">
-        <Pagination currentPage={currentPage} totalPage={totalPage} setCurrentPage={setCurrentPage} ></Pagination>
+        <Pagination
+          currentPage={currentPage}
+          totalPage={totalPage}
+          setCurrentPage={setCurrentPage}></Pagination>
       </div>
     </div>
   );

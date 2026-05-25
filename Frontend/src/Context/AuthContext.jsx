@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [loginButtonDisbaled, setLoginButtonDisbaled] = useState(false);
+  const [signupButtonDisbaled, setSignupButtonDisbaled] = useState(false);
   // auth update message
   const [updateMessage, setUpdateMessage] = useState({
     message: "",
@@ -14,13 +15,14 @@ export const AuthProvider = ({ children }) => {
     type: null,
   });
   // logout
- 
+
   const [isLoggedOut, setIsLoggedOut] = useState(false);
 
   // **********SignUp Form Handler**********
   const UserSignup = async (username, email, password) => {
     try {
       const formdata = { username: username, email: email, password: password };
+      setSignupButtonDisbaled(true);
       const res = await api.post("auth/register", formdata);
       setUpdateMessage({
         message: res?.data?.message,
@@ -37,12 +39,15 @@ export const AuthProvider = ({ children }) => {
       });
 
       console.log(error.response.data.message || "Somthing went wrong!");
+    } finally {
+      setSignupButtonDisbaled(false);
     }
   };
   // **********Login Form Handler**********
   const UserLogin = async (email, password) => {
     try {
       const formData = { email, password };
+      setLoginButtonDisbaled(true);
       const res = await api.post("auth/login", formData);
 
       setUpdateMessage({
@@ -58,8 +63,6 @@ export const AuthProvider = ({ children }) => {
           type: null,
         });
       }, 3000);
-
-      setLoginButtonDisbaled(true);
 
       GetMe();
     } catch (error) {
@@ -110,9 +113,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await api.post("auth/logout");
       console.log(res.data.message);
-     
+
       setIsLoggedOut(true);
-     
+
       setUser(null);
       return {
         status: true,
@@ -130,12 +133,13 @@ export const AuthProvider = ({ children }) => {
         UserSignup,
         UserLogin,
         UserLogout,
-      
+
         isLoggedOut,
 
         setUpdateMessage,
         user,
         loginButtonDisbaled,
+        signupButtonDisbaled,
         updateMessage,
         loading,
       }}>

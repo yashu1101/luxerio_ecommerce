@@ -1,13 +1,19 @@
-import { NavLink , useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "./AdminSidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext";
-export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
   const { user, UserLogout } = useContext(AuthContext);
+  const { sidebarHideOnElementClick, setSidebarHideOnElementClick } =
+    useState(false);
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const HideSidebarOnElementClick = () => {
+    setSidebarHideOnElementClick(true);
   };
 
   const navigate = useNavigate();
@@ -23,7 +29,6 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   return (
     <div className="admin-sidebar">
       <div className="admin-sidebar-profile-container">
-        
         <span className="admin-sidebar-toggle" onClick={toggleSidebar}>
           <FontAwesomeIcon
             className="admin-sidebar-toggle-icon"
@@ -40,28 +45,58 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
         </span>
       </div>
       <ul className="admin-sidebar-list">
-        <li className="admin-sidebar-list-element">
-          <NavLink className={({isActive}) => `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`} to="dashboard">
+        <li
+          className="admin-sidebar-list-element"
+          onClick={toggleSidebar}>
+          <NavLink
+            className={({ isActive }) =>
+              `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
+            }
+            to="dashboard">
             Dashboard
           </NavLink>
         </li>
-        <li className="admin-sidebar-list-element">
-          <NavLink className={({isActive}) => `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`} to="products">
+        <li
+          className="admin-sidebar-list-element"
+          onClick={toggleSidebar}>
+          <NavLink
+            className={({ isActive }) =>
+              `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
+            }
+            to="products">
             Products
           </NavLink>
         </li>
-        <li className="admin-sidebar-list-element">
-          <NavLink className={({isActive}) => `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`} to="categories">
+        <li
+          className="admin-sidebar-list-element"
+          onClick={toggleSidebar}>
+          <NavLink
+            className={({ isActive }) =>
+              `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
+            }
+            to="categories">
             Categories
           </NavLink>
         </li>
-        <li className="admin-sidebar-list-element">
-          <NavLink className={({isActive}) => `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`} to="orders">
+        <li
+          className="admin-sidebar-list-element"
+          onClick={toggleSidebar}>
+          <NavLink
+            className={({ isActive }) =>
+              `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
+            }
+            to="orders">
             Orders
           </NavLink>
         </li>
-        <li className="admin-sidebar-list-element">
-          <NavLink className={({isActive}) => `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`} to="users">
+        <li
+          className="admin-sidebar-list-element"
+          onClick={toggleSidebar}>
+          <NavLink
+            className={({ isActive }) =>
+              `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
+            }
+            to="users">
             Users
           </NavLink>
         </li>

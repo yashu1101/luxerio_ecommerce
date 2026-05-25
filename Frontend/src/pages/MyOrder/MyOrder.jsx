@@ -8,18 +8,18 @@ import { Loader } from "../../components/Loader/Loader";
 export const MyOrder = () => {
   const [orders, setOrders] = useState([]);
   const { user, loading } = useContext(AuthContext);
-  const [loadingData, setLoadingData] = useState(false);
+  const [loadingOrders, setLoadingOrders] = useState(false);
   // const [loading,setLoading]
 
   const getOrder = async () => {
     try {
-      setLoadingData(true);
+      setLoadingOrders(true);
       const res = await api.get("orders");
       setOrders(res?.data?.orders);
     } catch (error) {
       console.log(error.response.data.message || "Somthing went wrong!");
     } finally {
-      setLoadingData(false);
+      setLoadingOrders(false);
     }
   };
 
@@ -36,8 +36,8 @@ export const MyOrder = () => {
     getOrder();
   }, []);
 
-  if (loadingData) {
-    return <Loader></Loader>;
+  if (loadingOrders) {
+    return <Loader height={'100dvh'} ></Loader>;
   }
 
   return (

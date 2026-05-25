@@ -8,21 +8,30 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api/axios";
 import { AuthContext } from "../../Context/AuthContext";
+import { Loader } from "../../components/Loader/Loader";
 
 export const Cart = () => {
   const {
     message,
+  
+    getCartItems,
     cart,
     decreaseQuantity,
     increaseQuantity,
     ItemQuantity,
     RemoveFromCart,
+    loadingCart,
   } = useContext(CartContext);
+  const navigate = useNavigate();
   const { user,loading } = useContext(AuthContext);
-
   const [error, setError] = useState();
 
-  const navigate = useNavigate();
+  // get cart items
+  useEffect(() => {
+    getCartItems();
+  }, [cart.length]);
+ 
+
 
   // Redirect to login page if user not logged In.
   useEffect(() => {
@@ -34,6 +43,10 @@ export const Cart = () => {
   const placeOrder = () => {
     navigate("/checkout");
   };
+
+  // loading
+
+  if (loadingCart) return <Loader height="100dvh" />;
 
   return (
     <>

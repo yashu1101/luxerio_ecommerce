@@ -6,16 +6,16 @@ export const WishlistContext = createContext();
 export const WishlistProvider = ({ children }) => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [wishlist, setWishlist] = useState([]);
+  const [wishlistItem, setWishlistItem] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // fetch wishlist
 
-  const fetchWishlist = async () => {
+  const getWishlistItem = async () => {
     try {
       setLoading(true);
       const res = await api.get("wishlist");
-      setWishlist(res?.data?.products);
+      setWishlistItem(res?.data?.products);
     } catch (error) {
       setError(error.response.data.message);
     } finally {
@@ -24,19 +24,19 @@ export const WishlistProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchWishlist();
+    getWishlistItem();
   }, []);
 
   // check in wishlist
   const isInWishlist = (productId) => {
-    return wishlist.some((item) => item._id === productId);
+    return wishlistItem.some((item) => item._id === productId);
   };
 
   // Add to wishlist
   const AddToWishlist = async (productId) => {
     try {
       setLoading(true);
-      const exist = wishlist.find((item) => item._id === productId);
+      const exist = wishlistItem.find((item) => item._id === productId);
       if (exist) {
         console.log("Already exist.");
         setHeartColor(true);
@@ -57,6 +57,7 @@ export const WishlistProvider = ({ children }) => {
   const removeWishlistItem = async (productId) => {
     try {
       const res = await api.delete(`wishlist/${productId}`);
+      getWishlistItem();
       setMessage(res.data.message);
     } catch (error) {
       setError(error.response.data.message);
@@ -67,6 +68,8 @@ export const WishlistProvider = ({ children }) => {
     <WishlistContext.Provider
       value={{
         AddToWishlist,
+        wishlistItem,
+        getWishlistItem,
         removeWishlistItem,
         message,
         error,
