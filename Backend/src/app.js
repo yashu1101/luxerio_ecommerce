@@ -1,4 +1,5 @@
 import dotenv from 'dotenv'
+import compression from 'compression'
 dotenv.config()
 import cors from 'cors'
 import express, { urlencoded } from 'express'
@@ -19,7 +20,9 @@ import { dashboardRoute } from './routes/dashboard.route.js'
 const app = express()
 
 
+
 // middleware
+app.use(compression()); 
 app.use(cors({
     origin: [
         'https://luxerio.vercel.app',
