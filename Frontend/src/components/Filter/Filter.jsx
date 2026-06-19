@@ -2,14 +2,13 @@ import { useContext, useEffect, useRef, useState } from "react";
 import "./Filter.css";
 import { ProductContext } from "../../Context/ProductsContext";
 import { api } from "../../api/axios";
+import { useQuery } from "@tanstack/react-query";
 
 export const Filter = ({ category }) => {
-  const [selectedOption, setSelectOption] = useState("");
-  const [checkedBrands, setCheckedBrands] = useState([]);
-  const [checkedColors, setCheckedColors] = useState([]);
-  const [selectedPrice, setSelectedPrice] = useState("");
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
   const [brandDropdownOpen, setBrandDropdownOpen] = useState(false);
   const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
   const [brandDropdownPos, setBrandDropdownPos] = useState({ top: 0, left: 0 });
@@ -20,15 +19,31 @@ export const Filter = ({ category }) => {
   const colorDropdownRef = useRef(null);
   const colorBtnRef = useRef(null);
 
-  const { getAllProduct } = useContext(ProductContext);
+  const {
+    getAllProduct,
+    checkedBrands,
+    checkedColors,
+    selectedOption,
+    selectedPrice,
+    setCheckedBrands,
+    setCheckedColors,
+    setSelectedOption,
+    setSelectedPrice,
+  } = useContext(ProductContext);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (brandDropdownRef.current && !brandDropdownRef.current.contains(e.target)) {
+      if (
+        brandDropdownRef.current &&
+        !brandDropdownRef.current.contains(e.target)
+      ) {
         setBrandDropdownOpen(false);
       }
-      if (colorDropdownRef.current && !colorDropdownRef.current.contains(e.target)) {
+      if (
+        colorDropdownRef.current &&
+        !colorDropdownRef.current.contains(e.target)
+      ) {
         setColorDropdownOpen(false);
       }
     };
@@ -36,23 +51,13 @@ export const Filter = ({ category }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    getAllProduct({
-      category,
-      sortBy: selectedOption,
-      brand: checkedBrands.join(","),
-      color: checkedColors.join(","),
-      price: selectedPrice,
-    });
-  }, [selectedOption, checkedBrands, checkedColors, selectedPrice]);
-
-  const handleOnSelect = (e) => setSelectOption(e.target.value);
+  const handleOnSelect = (e) => setSelectedOption(e.target.value);
   const handlePriceChange = (e) => setSelectedPrice(e.target.value);
 
   // Brand handlers
   const handleBrandCheck = (brand) => {
     setCheckedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
     );
   };
   const clearBrands = () => setCheckedBrands([]);
@@ -72,7 +77,7 @@ export const Filter = ({ category }) => {
   // Color handlers
   const handleColorCheck = (color) => {
     setCheckedColors((prev) =>
-      prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+      prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color],
     );
   };
   const clearColors = () => setCheckedColors([]);
@@ -91,7 +96,9 @@ export const Filter = ({ category }) => {
 
   const getBrands = async () => {
     try {
-      const res = await api.get(`products/filter?category=${category}&type=brand`);
+      const res = await api.get(
+        `products/filter?category=${category}&type=brand`,
+      );
       setBrands(res?.data?.options || []);
     } catch (error) {
       console.log(error?.response?.data?.message || "Something went wrong!");
@@ -100,7 +107,9 @@ export const Filter = ({ category }) => {
 
   const getColors = async () => {
     try {
-      const res = await api.get(`products/filter?category=${category}&type=color`);
+      const res = await api.get(
+        `products/filter?category=${category}&type=color`,
+      );
       setColors(res?.data?.options || []);
     } catch (error) {
       console.log(error?.response?.data?.message || "Something went wrong!");
@@ -120,8 +129,7 @@ export const Filter = ({ category }) => {
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2.5"
-    >
+      strokeWidth="2.5">
       <polyline points="6 9 12 15 18 9" />
     </svg>
   );
@@ -129,10 +137,12 @@ export const Filter = ({ category }) => {
   return (
     <div className="filter-panel-wrapper">
       <div className="filter-panel">
-
         {/* Sort */}
         <div className="filter-item">
-          <select className="filter-select" value={selectedOption} onChange={handleOnSelect}>
+          <select
+            className="filter-select"
+            value={selectedOption}
+            onChange={handleOnSelect}>
             <option value="">Sort By</option>
             <option value="New">Newest</option>
             <option value="price_low">Price: Low to High</option>
@@ -142,7 +152,10 @@ export const Filter = ({ category }) => {
 
         {/* Price */}
         <div className="filter-item">
-          <select className="filter-select" value={selectedPrice} onChange={handlePriceChange}>
+          <select
+            className="filter-select"
+            value={selectedPrice}
+            onChange={handlePriceChange}>
             <option value="">Price</option>
             <option value="100-1000">₹100 – ₹1,000</option>
             <option value="1000-5000">₹1,000 – ₹5,000</option>
@@ -156,10 +169,11 @@ export const Filter = ({ category }) => {
             ref={colorBtnRef}
             className={`filter-select brand-trigger ${colorDropdownOpen ? "open" : ""}`}
             onClick={toggleColorDropdown}
-            type="button"
-          >
+            type="button">
             <span>
-              {checkedColors.length > 0 ? `Color (${checkedColors.length})` : "Color"}
+              {checkedColors.length > 0
+                ? `Color (${checkedColors.length})`
+                : "Color"}
             </span>
             <ChevronIcon open={colorDropdownOpen} />
           </button>
@@ -172,12 +186,14 @@ export const Filter = ({ category }) => {
                 top: colorDropdownPos.top,
                 left: colorDropdownPos.left,
                 zIndex: 9999,
-              }}
-            >
+              }}>
               {checkedColors.length > 0 && (
                 <div className="brand-dropdown-header">
                   <span>{checkedColors.length} selected</span>
-                  <button className="clear-brands-btn" onClick={clearColors} type="button">
+                  <button
+                    className="clear-brands-btn"
+                    onClick={clearColors}
+                    type="button">
                     Clear
                   </button>
                 </div>
@@ -215,10 +231,11 @@ export const Filter = ({ category }) => {
             ref={brandBtnRef}
             className={`filter-select brand-trigger ${brandDropdownOpen ? "open" : ""}`}
             onClick={toggleBrandDropdown}
-            type="button"
-          >
+            type="button">
             <span>
-              {checkedBrands.length > 0 ? `Brands (${checkedBrands.length})` : "Brand"}
+              {checkedBrands.length > 0
+                ? `Brands (${checkedBrands.length})`
+                : "Brand"}
             </span>
             <ChevronIcon open={brandDropdownOpen} />
           </button>
@@ -231,12 +248,14 @@ export const Filter = ({ category }) => {
                 top: brandDropdownPos.top,
                 left: brandDropdownPos.left,
                 zIndex: 9999,
-              }}
-            >
+              }}>
               {checkedBrands.length > 0 && (
                 <div className="brand-dropdown-header">
                   <span>{checkedBrands.length} selected</span>
-                  <button className="clear-brands-btn" onClick={clearBrands} type="button">
+                  <button
+                    className="clear-brands-btn"
+                    onClick={clearBrands}
+                    type="button">
                     Clear
                   </button>
                 </div>
@@ -262,7 +281,6 @@ export const Filter = ({ category }) => {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

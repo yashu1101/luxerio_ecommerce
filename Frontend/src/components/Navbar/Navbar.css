@@ -24,7 +24,7 @@
 .navbar-title {
   font-size: 1.5rem;
   font-weight: 900;
-  background: linear-gradient(45deg, var(--primary-color), #ffd648);
+  background: var(--gradient-color);
   background-clip: text;
   color: transparent;
   border: 1px solid;
@@ -106,7 +106,7 @@
  
   border-radius: 23px;
   height: 20px;
-  background: linear-gradient(45deg, var(--primary-color), #ffd648);
+  background: var(--gradient-color);
 }
 .nav-action-ai-text{
   color: white;

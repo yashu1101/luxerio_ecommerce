@@ -1,36 +1,33 @@
 import "./Cart.css";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CartContext } from "../../Context/CartContext";
 
-import { Navbar } from "../../components/Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { api } from "../../api/axios";
 import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
 
 export const Cart = () => {
   const {
     message,
-  
-    getCartItems,
-    cart,
+    data,
+    isError,
+    isLoading,
+    isIncreasePending,
+    isDecreasePending,
+    error,
     decreaseQuantity,
+    decreaseData,
     increaseQuantity,
     ItemQuantity,
     RemoveFromCart,
     loadingCart,
   } = useContext(CartContext);
   const navigate = useNavigate();
-  const { user,loading } = useContext(AuthContext);
-  const [error, setError] = useState();
+  const { user, loading } = useContext(AuthContext);
 
-  // get cart items
-  useEffect(() => {
-    getCartItems();
-  }, [cart.length]);
- 
+  // console.log(data);
 
 
   // Redirect to login page if user not logged In.
@@ -46,14 +43,14 @@ export const Cart = () => {
 
   // loading
 
-  if (loadingCart) return <Loader height="100dvh" />;
+  if (isLoading) return <Loader height="100dvh" />;
 
   return (
     <>
       <div className="cart-section">
         <div className="cart-item-container">
           <div className="cart-heading-container">
-            {cart.length > 0 ? (
+            {data && data.length > 0 ? (
               <h3 className="cart-heading">Cart Items</h3>
             ) : (
               <div className="cart-empty-text-container">
@@ -65,7 +62,7 @@ export const Cart = () => {
             )}
           </div>
 
-          {cart?.map((item) => {
+          {data?.map((item) => {
             return (
               <div className="cart-item" key={item._id}>
                 <FontAwesomeIcon
@@ -94,10 +91,10 @@ export const Cart = () => {
                     {(item?.product?.price * item.quantity).toFixed(2)}{" "}
                   </span>
 
-                  <div className="cart-item-quantity-container">
+                  <div className="cart-item-quantity-container ">
                     <FontAwesomeIcon
                       icon={faMinus}
-                      className="cart-item-decrease"
+                      className={`cart-item-decrease ${isDecreasePending ? "cart-item-quantity-disabled" : ""}`}
                       onClick={() => {
                         decreaseQuantity(item.product._id);
                       }}></FontAwesomeIcon>
@@ -106,7 +103,7 @@ export const Cart = () => {
                     </span>
                     <FontAwesomeIcon
                       icon={faPlus}
-                      className="cart-item-increase"
+                      className={`cart-item-increase ${isIncreasePending ? "cart-item-quantity-disabled" : ""}`}
                       onClick={() => {
                         increaseQuantity(item.product._id);
                       }}></FontAwesomeIcon>
@@ -116,11 +113,11 @@ export const Cart = () => {
             );
           })}
         </div>
-        {cart.length > 0 && (
+        {data && data.length > 0 && (
           <div className="cart-place-btn-container">
             <span className="total-amount">
               Total Price: ₹
-              {cart
+              {data
                 .reduce(
                   (total, item) => total + item.product.price * item.quantity,
                   0,

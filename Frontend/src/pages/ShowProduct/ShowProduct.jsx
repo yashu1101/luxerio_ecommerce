@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { Card } from "../../components/Card/Card";
 import "./ShowProduct.css";
@@ -13,33 +14,53 @@ import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { ProductContext } from "../../Context/ProductsContext";
 import { Pagination } from "../../components/Pagination/Pagination";
 import { Loader } from "../../components/Loader/Loader";
+import { useProduct } from "../../hooks/useProduct";
 
 export const ShowProduct = () => {
   const { categoryName } = useParams();
 
   const {
-    products,
-    getAllProduct,
-    loading,
+    checkedBrands,
+    checkedColors,
+    selectedOption,
+    selectedPrice,
+    setCheckedBrands,
+    setCheckedColors,
+    setSelectedPrice,
+    setSelectedOption,
     currentPage,
     setCurrentPage,
     totalPage,
   } = useContext(ProductContext);
 
+  const { data, isLoading, error } = useProduct({
+    categoryName,
+    checkedBrands,
+    checkedColors,
+    selectedOption,
+    selectedPrice,
+  });
+
   useEffect(() => {
-    getAllProduct({ category: categoryName });
-  }, [categoryName, currentPage]);
+    setCheckedBrands([]);
+    setCheckedColors([]);
+    setSelectedPrice("");
+    setSelectedOption("");
+  }, [categoryName]);
+
+  // console.log(data);
+  // console.log(error);
 
   return (
     <>
       <div className="product-section">
         <Filter category={categoryName}></Filter>
 
-        {loading ? (
-          <Loader height={"80vh"}></Loader>
+        {isLoading ? (
+          <Loader height={"80dvh"}></Loader>
         ) : (
           <div className="products">
-            {products?.map((product) => {
+            {data?.products?.map((product) => {
               return (
                 <div className="product" key={product?._id}>
                   <Card

@@ -6,7 +6,7 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 export const Carousel = ({ images, control, auto }) => {
   const [count, setCount] = useState(0);
 
-  console.log(images.length)
+  // console.log(images.length)
 
   useEffect(() => {
 
@@ -43,7 +43,7 @@ export const Carousel = ({ images, control, auto }) => {
     });
   };
 
-  // console.log(count);
+
 
   const carouselImages = {
     transform: `translateX(-${count * 100}%)`,

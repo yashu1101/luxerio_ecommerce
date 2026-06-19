@@ -48,8 +48,8 @@ export const Loader = ({height}) => {
               clip-path="url(#loader-eyes)"
               height="64"
               width="128"
-              fill="hsl(16, 100%, 62%)"></rect>
-            <g stroke="hsl(16, 100%, 62%)" fill="none">
+              fill="#26c0ff"></rect>
+            <g stroke="#26c0ff" fill="none">
               <circle
                 transform="rotate(180,64,64)"
                 r="56"
@@ -70,7 +70,7 @@ export const Loader = ({height}) => {
               height="64"
               width="128"
               fill="hsl(46.56deg 100% 64.12%)"></rect>
-            <g stroke="hsl(46.56deg 100% 64.12%)" fill="none">
+            <g stroke="#4857ff" fill="none">
               <circle
                 transform="rotate(180,64,64)"
                 r="56"

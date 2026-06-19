@@ -44,48 +44,56 @@ export const AuthProvider = ({ children }) => {
     }
   };
   // **********Login Form Handler**********
+  // const UserLogin = async (email, password) => {
+  //   try {
+  //     setLoginButtonDisabled(true);
+  //     const formData = { email, password };
+  //     const res = await api.post("auth/login", formData);
+
+  //     setUpdateMessage({
+  //       message: res?.data?.message,
+  //       color: "green",
+  //       type: "login",
+  //     });
+
+  //     setTimeout(() => {
+  //       setUpdateMessage({
+  //         message: "",
+  //         color: "",
+  //         type: null,
+  //       });
+  //     }, 3000);
+
+  //     GetMe();
+  //   } catch (error) {
+  //     setUpdateMessage({
+  //       message: error.response.data.message || "Somthing went wrong!",
+  //       color: "red",
+  //       type: "login",
+  //     });
+
+  //     setTimeout(() => {
+  //       setUpdateMessage({
+  //         message: "",
+  //         color: "",
+  //         type: null,
+  //       });
+  //     }, 3000);
+
+  //     console.log(error.response.data.message || "Somthing went wrong!");
+  //   } finally {
+  //     setLoginButtonDisabled(false);
+  //   }
+  // };
+
   const UserLogin = async (email, password) => {
-    try {
-      setLoginButtonDisabled(true);
-      const formData = { email, password };
-      const res = await api.post("auth/login", formData);
-
-      setUpdateMessage({
-        message: res?.data?.message,
-        color: "green",
-        type: "login",
-      });
-
-      setTimeout(() => {
-        setUpdateMessage({
-          message: "",
-          color: "",
-          type: null,
-        });
-      }, 3000);
-
-      GetMe();
-    } catch (error) {
-      setUpdateMessage({
-        message: error.response.data.message || "Somthing went wrong!",
-        color: "red",
-        type: "login",
-      });
-
-      setTimeout(() => {
-        setUpdateMessage({
-          message: "",
-          color: "",
-          type: null,
-        });
-      }, 3000);
-
-      console.log(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoginButtonDisabled(false);
-    }
+    const formData = { email, password };
+    const res = await api.post("auth/login", formData);
+    return res?.data;
   };
+
   // ***********Get loggedIn user**************
+
   const GetMe = async () => {
     try {
       setLoading(true);
@@ -139,7 +147,7 @@ export const AuthProvider = ({ children }) => {
         setUpdateMessage,
         user,
         loginButtonDisabled,
-        signupButtonDisabled  ,
+        signupButtonDisabled,
         updateMessage,
         loading,
       }}>

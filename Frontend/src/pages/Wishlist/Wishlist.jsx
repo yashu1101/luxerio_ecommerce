@@ -1,24 +1,21 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { WishlistContext } from "../../Context/WishlistContext";
 import { CartContext } from "../../Context/CartContext";
 import "./Wishlist.css";
-import { Navbar } from "../../components/Navbar/Navbar";
 import { Link, useNavigate } from "react-router-dom";
-import { PopupBox } from "../../components/PopupBox/PopupBox";
-import { api } from "../../api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
 
 export const Wishlist = () => {
-  const { wishlistItem, removeWishlistItem, loadingWishlist, getWishlistItem } =
+  const { wishlistItem, data, isError, isLoading, removeWishlistItem, loadingWishlist, getWishlistItem } =
     useContext(WishlistContext);
   const { user,loading } = useContext(AuthContext);
-  const { popup } = useContext(WishlistContext);
+ 
   const { AddToCart, cartPopup } = useContext(CartContext);
 
-  // const [loadingWishlist, setLoadingWishlist] = useState(false);
+
   const navigate = useNavigate();
 
 
@@ -35,15 +32,18 @@ export const Wishlist = () => {
     }
   }, [user, loading, navigate]);
 
+  // console.log(data)
+
   // Loading
-if(loadingWishlist) return <Loader height="100dvh" />
+
+if(isLoading) return <Loader height="100dvh" />
 
   return (
     <>
       <div className="wishlist-section">
         <div className="wishlist-container">
           <div className="cart-heading-container">
-            {wishlistItem?.length > 0 ? (
+            {data?.length > 0 ? (
               <h3 className="cart-heading">Wishlist Items</h3>
             ) : (
               <div className="cart-empty-text-container">
@@ -54,7 +54,7 @@ if(loadingWishlist) return <Loader height="100dvh" />
               </div>
             )}
           </div>
-          {wishlistItem?.map((item) => (
+          {data?.map((item) => (
             <div className="wishlist-item" key={item._id}>
               <div className="wishlist-card-image-container">
                 <Link to={`/view/${item._id}`}>

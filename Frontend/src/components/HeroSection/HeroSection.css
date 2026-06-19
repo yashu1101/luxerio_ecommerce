@@ -7,7 +7,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
- 
 }
 
 .hero-section-text-container {
@@ -44,7 +43,9 @@
   border: none;
   /* border-radius: 5px; */
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .hero-section-subtext {
@@ -76,6 +77,11 @@
   /* max-width: 400px; */
 }
 
+@media (max-width: 768px) {
+  .hero-section {
+    display: none;
+  }
+}
 @media (max-width: 480px) {
   .hero-section-image-container {
     position: relative;
@@ -87,5 +93,6 @@
     font-size: 3rem;
   }
 
-  .hero-section-shop-now-btn {}
+  .hero-section-shop-now-btn {
+  }
 }

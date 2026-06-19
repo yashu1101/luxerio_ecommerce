@@ -73,7 +73,7 @@
   align-items: center;
   right: 6px;
   padding: 12px 11px;
-  background: linear-gradient(45deg, var(--primary-color), #ffd648);
+  background: var(--gradient-color);
   border-radius: 50px;
   border: none;
   color: white;

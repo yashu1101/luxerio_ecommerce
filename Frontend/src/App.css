@@ -10,7 +10,10 @@
   --text-color: black;
   --font-family: "Inter";
 
-  --primary-color: hsl(16, 100%, 62%);
+
+  --primary-color: #26c0ff;
+  --transparent-color: #ffffff57;
+  --gradient-color: linear-gradient(45deg, #26c0ff, #4857ff);
 }
 
 html {
@@ -22,7 +25,7 @@ Link,
 a {
   text-decoration: none;
 }
-button{
+button {
   cursor: pointer;
 }
 

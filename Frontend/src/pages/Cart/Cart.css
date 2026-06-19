@@ -133,6 +133,11 @@
   padding: 3px;
 }
 
+.cart-item-quantity-disabled{
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 .cart-place-btn-container {
   /* position: fixed; */
   bottom: 0;

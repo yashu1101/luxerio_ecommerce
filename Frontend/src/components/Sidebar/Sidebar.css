@@ -46,7 +46,7 @@
   height: 120px;
   padding: 10px 10px;
   gap: 5px;
-  background: linear-gradient(45deg, var(--primary-color), #ffd648);
+  background: var(--gradient-color);
   background-position: 0;
   /* animation: authAnimation 3s linear infinite forwards; */
   border-radius: 10px;
@@ -69,7 +69,7 @@
   width: fit-content;
   border-radius: 50px;
   padding: 6px 10px;
-  background: #3b2500;
+  background: var(--transparent-color);
   cursor: pointer;
 }
 

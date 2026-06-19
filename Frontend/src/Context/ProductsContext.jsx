@@ -1,70 +1,25 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useState } from "react";
 import { api } from "../api/axios";
 export const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
-  const [allProducts, setAllProducts] = useState([]);
-  const [products, setProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  // get all product data
+  // filter state
 
-  const getAllProductData = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get("products");
+  const [selectedOption, setSelectedOption] = useState("");
+  const [checkedBrands, setCheckedBrands] = useState([]);
+  const [checkedColors, setCheckedColors] = useState([]);
+  const [selectedPrice, setSelectedPrice] = useState("");
 
-      setAllProducts(res?.data?.products);
-    } catch (error) {
-      setError(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    getAllProductData();
-  }, []);
-
-  // get all products
-  const getAllProduct = async ({
-    search = "",
-    category = "",
-    brand = "",
-    color = "",
-    sortBy = "",
-    price = "",
-  }) => {
-    try {
-      setLoading(true);
-      const res = await api.get(
-        `products?search=${search}&category=${category}&brand=${brand}&color=${color}&sortBy=${sortBy}&price=${price}&page=${currentPage}&limit=10`,
-      );
-      setLoading(true);
-      setProducts(res?.data?.products);
-      setTotalPage(res?.data?.totalPage);
-      console.log(res?.data?.totalPage);
-    } catch (error) {
-      setError(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // update product
   const updateProduct = async (productId) => {
-    try {
-      setLoading(true);
-      const res = await api.put(`products/${productId}`);
-      setMessage(res?.data?.message);
-    } catch (error) {
-      setError(error.response.data.message || "Somthing went wrongh!");
-    } finally {
-      setLoading(false);
-    }
+    const res = await api.put(`products/${productId}`);
+    setMessage(res?.data?.message);
   };
   // delete product
   const deleteProduct = async (productId) => {
@@ -79,16 +34,21 @@ export const ProductProvider = ({ children }) => {
   return (
     <ProductContext.Provider
       value={{
-        allProducts,
-
-        getAllProductData,
-        products,
         currentPage,
         setCurrentPage,
         totalPage,
-        getAllProduct,
+
         deleteProduct,
-        loading,
+
+        checkedBrands,
+        checkedColors,
+        selectedOption,
+        selectedPrice,
+
+        setCheckedBrands,
+        setCheckedColors,
+        setSelectedOption,
+        setSelectedPrice,
       }}>
       {children}
     </ProductContext.Provider>

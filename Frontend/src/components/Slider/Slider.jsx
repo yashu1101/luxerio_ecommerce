@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Slider.css";
 import {
@@ -7,31 +7,11 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
-import { api } from "../../api/axios";
-import { ProductContext } from "../../Context/ProductsContext";
+import { Loader } from "../Loader/Loader";
+import { useSlider } from "../../hooks/useSlider";
 
 export const Slider = ({ title, sortBy, category, align, to }) => {
-  const { products, getAllProduct } = useContext(ProductContext);
-  const [sliderProducts, setSliderProducts] = useState([]);
-
-  const [sliderItem, setSliderItem] = useState([]);
-  const [error, setError] = useState("");
-
-  const getSliderProducts = async () => {
-    try {
-      const res = await api.get(`products?category=${category || ""}&sortBy=${sortBy || ""}`);
-      setSliderProducts(res?.data?.products);
-    } catch (error) {
-      setError("Failed to fetch slider products");
-    }
-  };
-
-  // api for set slider product
-
-  useEffect(() => {
-    // getAllProduct({ sortBy: sortBy, category: category });
-    getSliderProducts();
-  }, []);
+  const { data, isLoading, error } = useSlider({ category, sortBy });
 
   const rowRef = useRef(null);
   const itemRef = useRef(null);
@@ -54,6 +34,7 @@ export const Slider = ({ title, sortBy, category, align, to }) => {
 
   return (
     <div className="slider-container">
+      {isLoading && <Loader height={"20px"}></Loader>}
       <div className="slider-titlebar" style={sliderTitleBar}>
         <span className="slider-title">{title}</span>
         <Link className="slider-link-button" to={to}>
@@ -66,7 +47,7 @@ export const Slider = ({ title, sortBy, category, align, to }) => {
         </div>
 
         <div className="slider-row" ref={rowRef}>
-          {sliderProducts?.map((item, key) => {
+          {data?.map((item, key) => {
             return (
               <div
                 className="slider-images"
@@ -81,8 +62,7 @@ export const Slider = ({ title, sortBy, category, align, to }) => {
 
         <div
           onClick={slideRight}
-          className="slider-buttons slider-button-right"
-        >
+          className="slider-buttons slider-button-right">
           <FontAwesomeIcon icon={faChevronRight} className="slider-button" />
         </div>
       </div>

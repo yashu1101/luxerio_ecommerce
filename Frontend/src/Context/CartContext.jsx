@@ -1,29 +1,26 @@
 import { createContext, useEffect, useState } from "react";
 import { api } from "../api/axios";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+
   const [cartPopup, setCartPopup] = useState("");
   const [cart, setCart] = useState([]);
   const [loadingCart, setLoadingCart] = useState(false);
 
+  const queryClient = useQueryClient();
+
   // Fetch cart items
   const getCartItems = async () => {
-    try {
-      setLoadingCart(true);
-      const res = await api.get("cart");
-      setCart(res?.data?.products);
-    } catch (error) {
-      setError(error.response.data.message);
-    } finally {
-      setLoadingCart(false);
-    }
+    const res = await api.get("cart");
+    return res?.data?.products;
   };
 
-  useEffect(() => {
-    getCartItems();
-  }, []);
+  const { data, isError, isLoading, error } = useQuery({
+    queryKey: ["cart"],
+    queryFn: getCartItems,
+  });
 
   // Check if item is in cart
   const isInCart = (productId) => {
@@ -32,66 +29,89 @@ export const CartProvider = ({ children }) => {
 
   // Add to cart
 
-  const AddToCart = async (productId) => {
-    try {
-      setLoadingCart(true);
+  const { mutate: AddToCart } = useMutation({
+    mutationFn: async (productId) => {
       const res = await api.post("cart", { productId });
-      setMessage(res.data.message);
-    } catch (error) {
-      setError(error.response.data.message);
-    } finally {
-      setLoadingCart(false);
-    }
-  };
+      return res.data;
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      setMessage(data?.message || "Added to cart");
+    },
+
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   // increase cart item quantity
 
-  const increaseQuantity = async (productId) => {
-    try {
-      const res = await api.put(`cart/increase/${productId}`);
-      getCartItems();
-      setMessage(res.data.message);
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  };
-  // decrease cart item quantity
+  const { mutate: increaseQuantity, isPending: isIncreasePending } =
+    useMutation({
+      mutationFn: async (productId) => {
+        const res = await api.put(`cart/increase/${productId}`);
+        return res.data;
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: ["cart"] });
+        setMessage(data?.message || "Quantity increased!");
+      },
 
-  const decreaseQuantity = async (productId) => {
-    try {
-      const res = await api.put(`cart/decrease/${productId}`);
-      getCartItems();
-      setMessage(res.data.message);
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  };
+      onError: (error) => {
+        console.error(error);
+      },
+    });
+
+  // decrease cart item quantity
+  const { mutate: decreaseQuantity, isPending: isDecreasePending } =
+    useMutation({
+      mutationFn: async (productId) => {
+        const res = await api.put(`cart/decrease/${productId}`);
+        return res.data;
+      },
+      onSuccess: (data) => {
+        queryClient.invalidateQueries({ queryKey: ["cart"] });
+        setMessage(data?.message || "Quantity decreased!");
+      },
+
+      onError: (error) => {
+        console.error(error);
+      },
+    });
 
   // remove from cart
 
-  const RemoveFromCart = async (productId) => {
-    try {
-      
+  const { mutate: RemoveFromCart } = useMutation({
+    mutationFn: async (productId) => {
       const res = await api.delete(`cart/${productId}`);
-      setMessage(res.data.message);
-      getCartItems();
-    } catch (error) {
-      setError(error.response.data.message);
-    } 
-  };
+      return res.data.message;
+    },
+
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["cart"] });
+      console.log(data);
+    },
+    onError: (error) => console.log(error),
+  });
   return (
     <CartContext.Provider
       value={{
         cartPopup,
         message,
         error,
-        cart,
-        getCartItems,
+        data,
+        isError,
+        isLoading,
+
+        error,
         AddToCart,
         RemoveFromCart,
         decreaseQuantity,
         increaseQuantity,
+        isIncreasePending,
+        isDecreasePending,
         isInCart,
-        loadingCart
+        loadingCart,
       }}>
       {children}
     </CartContext.Provider>

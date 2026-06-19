@@ -1,0 +1,42 @@
+.placeholder-container {
+  width: 100%;
+ 
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, rgb(239 239 239), rgb(219 219 219 / 43%));
+  /* opacity: 0; */
+  transition: 0.5s all;
+  animation: blink 0.9s linear infinite alternate;
+}
+
+@keyframes blink {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.placeholder-icon {
+  font-size: 1.5rem;
+  color: #d1d1d1;
+  animation: rotate 5s linear infinite forwards;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotateZ(0);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .placeholder-container {
+    /* height: 150px; */
+  }
+}

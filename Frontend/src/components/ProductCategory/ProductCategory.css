@@ -39,10 +39,11 @@
     .category-slider {
         width: 100%;
         display: flex;
+        margin-top: 120px;
         /* justify-content: center; */
         align-items: center;
         /* overflow: hidden; */
-        padding: 40px 20px;
+        padding: 0px 20px;
         box-sizing: border-box;
         overflow: scroll;
         scrollbar-width: none;
