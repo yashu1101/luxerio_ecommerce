@@ -19,10 +19,12 @@ import {
 
 import starImage from "../../assets/icons/stars.png";
 import { useEffect } from "react";
-import { useLogout } from "../../hooks/useLogout";
+import { useLogout } from "../../hooks/useAuth";
+import { useUser } from "../../hooks/useUser";
 
 export const Sidebar = ({ isSidebar, setIsOpen }) => {
-  const { UserLogout, message, user } = useContext(AuthContext);
+  // const { UserLogout, message, user } = useContext(AuthContext);
+  const { data: user } = useUser()
   const {mutate: logoutMutate, isPending} = useLogout()
 
  
@@ -49,7 +51,7 @@ export const Sidebar = ({ isSidebar, setIsOpen }) => {
               Logout
               <FontAwesomeIcon
                 className="logout-button-icon"
-                onClick={UserLogout}
+                onClick={logoutMutate}
                 icon={faArrowRightFromBracket}></FontAwesomeIcon>
             </span>
 

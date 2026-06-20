@@ -1,55 +1,49 @@
 import "./Auth.css";
-
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext, useEffect } from "react";
-import { AuthContext } from "../../Context/AuthContext";
-import { useMutation } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { useUser } from "../../hooks/useUser";
+import { useLogin } from "../../hooks/useAuth";
+import { Loader } from "../../components/Loader/Loader";
 
 export const Login = () => {
   const [AuthEmail, setAuthEmail] = useState("");
   const [AuthPassword, setAuthPassword] = useState("");
-  
-  const navigate = useNavigate();
-  const { UserLogin, user, updateMessage, loginButtonDisabled, loading } =
-  useContext(AuthContext);
-  const {data, isLoading,error: getUserError} = useUser()
 
-    
-    
-    
-    // TSQ
-    const {
-      mutate: loginMutate,
-      isPending,
-      isError,
-      error,
-    } = useMutation({
-      mutationFn: () => UserLogin(AuthEmail, AuthPassword),
-      onSuccess: (data) => {
-        console.log(data);
-        
-        // redirect user
-        
-        if (data?.role) {
-          if (data?.role === "admin") {
-            navigate("/admin", { replace: true });
-          } else {
-          navigate("/", { replace: true });
-        }
-      }
-    },
-    onError: (error) => console.log(error),
-  });
+  const navigate = useNavigate();
+
+  const { mutate: loginMutate, isPending, error } = useLogin();
+  const { data, isLoading, error: getUserError } = useUser();
+  const [message, setMessage] = useState("");
 
   const LoginFormHandler = async (e) => {
     e.preventDefault();
-    
-    loginMutate();
+    loginMutate(
+      { email: AuthEmail, password: AuthPassword },
+      {
+        onSuccess: (data) => {
+          //  redirect user
+
+          if (data?.role) {
+            if (data?.role === "admin") {
+              navigate("/admin", { replace: true });
+            } else {
+              navigate("/", { replace: true });
+            }
+          }
+        },
+        onError: (error) => {
+          console.log("Login failed!");
+          setMessage(error?.response?.data?.message);
+
+          setTimeout(() => {
+            setMessage("");
+          }, 3000);
+        },
+      },
+    );
   };
   // redirect if already loggedIn
-  
-  console.log(data)
 
   useEffect(() => {
     if (!isLoading && data) {
@@ -68,16 +62,17 @@ export const Login = () => {
   };
   return (
     <>
-      <div className="auth">
+      <motion.div
+        initial={{ opacity: 0, translateX: -50 }}
+        animate={{ opacity: 1, translateX: 0 }}
+        exit={{ opacity: 0, translateX: 50 }}
+        transition={{duration: 0.3, ease:"easeIn"}}
+        className="auth">
         <div className="auth-form-pannel">
           <span className="login-title">Login</span>
 
           <form onSubmit={LoginFormHandler} className="auth-form">
-            {updateMessage.type === "login" && (
-              <span style={{ color: updateMessage.color }}>
-                {updateMessage.message}
-              </span>
-            )}
+            <span style={{ color: "red" }}>{message}</span>
 
             <input
               className="auth-form-field email-field"
@@ -111,7 +106,7 @@ export const Login = () => {
             </Link>
           </form>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

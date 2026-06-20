@@ -51,7 +51,7 @@
 }
 
 .admin-sidebar-profile-role {
-  color: #8f3d03;
+  color: #216eb0;
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -68,7 +68,7 @@
   color: white;
   height: 40px;
   border-radius: 50px;
-  background: #e1840970;
+
 }
 
 .admin-sidebar-toggle-icon {
@@ -147,7 +147,7 @@
   text-align: center;
   font-weight: 600;
   box-sizing: border-box;
-  background: #3b2500;
+  background: var(--transparent-color);
   width: 80px;
   color: #ffffff;
   cursor: pointer;
@@ -166,7 +166,7 @@
   }
 
   .admin-sidebar-profile-role {
-    color: #8f3d03;
+    color: #216eb0;
     font-weight: 600;
     font-size: 1.4rem;
   }
@@ -181,7 +181,7 @@
     text-align: center;
     font-weight: 600;
     box-sizing: border-box;
-    background: #3b2500;
+   
     width: 80px;
     color: #ffffff;
   }

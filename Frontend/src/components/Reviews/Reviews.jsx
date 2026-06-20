@@ -5,35 +5,34 @@ import { api } from "../../api/axios";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
+import { useReviewAdd } from "../../hooks/useReviewAdd";
+import { useUser } from "../../hooks/useUser";
 export const Reviews = ({ reviews, productId }) => {
-  const { user } = useContext(AuthContext);
+  const { data: user } = useUser();
   const [reviewForm, setReviewForm] = useState(false);
+  const { mutate: addReviewMutate, isPending } = useReviewAdd();
   const [formData, setFormData] = useState({
     comment: "",
     rating: "",
   });
 
-
-
   // add review
-
-
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    console.log("comment:" + formData.comment + "Rating:" + formData.rating);
-    try {
-      const res = await api.post(`products/review/${productId}`, {
+    addReviewMutate(
+      {
+        productId: productId,
         comment: formData.comment,
         rating: formData.rating,
-      });
-      console.log(res.data.isDisabled);
-      setIsDisabled(res.data.isDisabled);
-
-      setReviewForm(false);
-    } catch (error) {
-      console.log(error.response.data.message || "Somthing went wrong!");
-    }
+      },
+      {
+        onSuccess: (data) => {
+          setReviewForm(false);
+          console.log(data);
+        },
+      },
+    );
   };
 
   console.log(user);

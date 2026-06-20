@@ -2,11 +2,24 @@ import React, { useState, useEffect } from "react";
 import "./ProductForm.css";
 import { api } from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
+import {
+  useAddProduct,
+  useUpdateProduct,
+} from "../../../hooks/useProductAction";
+import { useCategory } from "../../../hooks/useCategory";
+import { useProduct } from "../../../hooks/useProduct";
 
 export const ProductForm = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const isEditMode = !!productId;
+
+  const { mutate: addProductMutate, isPending: addProductPending } =
+    useAddProduct();
+  const { mutate: updateProductMutate, isPending: updateProductPending } =
+    useUpdateProduct();
+  const { data: categories } = useCategory();
+  const { data: products } = useProduct();
 
   const [formData, setFormData] = useState({
     title: "",
@@ -18,25 +31,13 @@ export const ProductForm = () => {
     stock: "",
     rating: "",
     description: "",
-    specifications: [], // Nayi field
+    specifications: [],
   });
 
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
 
   // Fetch Categories
-  const fetchCategories = async () => {
-    try {
-      const res = await api.get("categories");
-      setCategories(res?.data);
-    } catch (error) {
-      console.log(error?.response?.data?.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
   // Fetch Product (Edit Mode)
   useEffect(() => {
@@ -56,7 +57,7 @@ export const ProductForm = () => {
             stock: product?.stock || "",
             rating: product?.rating || "",
             description: product?.description || "",
-            specifications: product?.specifications || [], // Specs load ho jayenge
+            specifications: product?.specifications || [],
           });
 
           setThumbnailPreview(product?.thumbnail);
@@ -77,7 +78,7 @@ export const ProductForm = () => {
     }));
   };
 
-  // --- Specifications Logic Start ---
+  // --- Specifications Start ---
   const addSpecification = () => {
     setFormData((prev) => ({
       ...prev,
@@ -95,7 +96,7 @@ export const ProductForm = () => {
     const updatedSpecs = formData.specifications.filter((_, i) => i !== index);
     setFormData((prev) => ({ ...prev, specifications: updatedSpecs }));
   };
-  // --- Specifications Logic End ---
+  // --- Specifications End ---
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -125,9 +126,11 @@ export const ProductForm = () => {
       }
 
       if (isEditMode) {
-        await api.put(`products/${productId}`, data);
+        // await api.put(`products/${productId}`, data);
+        updateProductMutate({ productId: productId, updateData: data });
       } else {
-        await api.post("products", data);
+        // await api.post("products", data);
+        addProductMutate({ productData: data });
       }
       navigate("/admin");
     } catch (error) {
@@ -138,42 +141,114 @@ export const ProductForm = () => {
   return (
     <div className="pf-container">
       <div className="pf-wrapper">
-        <h1 className="pf-heading">{isEditMode ? "Update Product" : "Add New Product"}</h1>
+        <h1 className="pf-heading">
+          {isEditMode ? "Update Product" : "Add New Product"}
+        </h1>
         <form onSubmit={handleSubmit}>
           {/* Title & Image fields */}
           <div className="pf-group">
             <label>Product Title *</label>
-            <input type="text" name="title" value={formData.title} onChange={handleInputChange} required />
+            <input
+              type="text"
+              name="title"
+              value={formData.title}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
           <div className="pf-group">
             <label>Thumbnail Image *</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} required={!isEditMode} />
-            {thumbnailPreview && <img src={thumbnailPreview} alt="preview" className="pf-preview" />}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              required={!isEditMode}
+            />
+            {thumbnailPreview && (
+              <img
+                src={thumbnailPreview}
+                alt="preview"
+                className="pf-preview"
+              />
+            )}
           </div>
 
           <div className="pf-grid">
-            <div className="pf-group"><label>Brand *</label><input type="text" name="brand" value={formData.brand} onChange={handleInputChange} required /></div>
-            <div className="pf-group"><label>Price *</label><input type="number" name="price" value={formData.price} onChange={handleInputChange} required /></div>
+            <div className="pf-group">
+              <label>Brand *</label>
+              <input
+                type="text"
+                name="brand"
+                value={formData.brand}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="pf-group">
+              <label>Price *</label>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="pf-grid">
             <div className="pf-group">
               <label>Category *</label>
-              <select name="category" value={formData.category} onChange={handleInputChange} required>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleInputChange}
+                required>
                 <option value="">Select</option>
-                {categories?.map((cat) => (<option key={cat._id} value={cat.slug}>{cat.title}</option>))}
+                {categories?.map((cat) => (
+                  <option key={cat._id} value={cat.slug}>
+                    {cat.title}
+                  </option>
+                ))}
               </select>
             </div>
-            <div className="pf-group"><label>Color *</label><input type="text" name="color" value={formData.color} onChange={handleInputChange} required /></div>
+            <div className="pf-group">
+              <label>Color *</label>
+              <input
+                type="text"
+                name="color"
+                value={formData.color}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
           </div>
 
           <div className="pf-grid">
-            <div className="pf-group"><label>Stock *</label><input type="number" name="stock" value={formData.stock} onChange={handleInputChange} required /></div>
-            <div className="pf-group"><label>Rating *</label><input type="number" name="rating" value={formData.rating} onChange={handleInputChange} required /></div>
+            <div className="pf-group">
+              <label>Stock *</label>
+              <input
+                type="number"
+                name="stock"
+                value={formData.stock}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="pf-group">
+              <label>Rating *</label>
+              <input
+                type="number"
+                name="rating"
+                value={formData.rating}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
           </div>
 
-         {/* specification feild */}
+          {/* specification feild */}
           <div className="pf-specs-section">
             <label className="pf-label-heading">Specifications</label>
             {formData.specifications.map((spec, index) => (
@@ -182,27 +257,44 @@ export const ProductForm = () => {
                   type="text"
                   placeholder="Feature (e.g. RAM)"
                   value={spec.key}
-                  onChange={(e) => handleSpecChange(index, "key", e.target.value)}
+                  onChange={(e) =>
+                    handleSpecChange(index, "key", e.target.value)
+                  }
                   className="pf-spec-input"
                 />
                 <input
                   type="text"
                   placeholder="Detail (e.g. 16GB)"
                   value={spec.value}
-                  onChange={(e) => handleSpecChange(index, "value", e.target.value)}
+                  onChange={(e) =>
+                    handleSpecChange(index, "value", e.target.value)
+                  }
                   className="pf-spec-input"
                 />
-                <button type="button" onClick={() => removeSpec(index)} className="pf-remove-spec">×</button>
+                <button
+                  type="button"
+                  onClick={() => removeSpec(index)}
+                  className="pf-remove-spec">
+                  ×
+                </button>
               </div>
             ))}
-            <button type="button" onClick={addSpecification} className="pf-add-spec-btn">
+            <button
+              type="button"
+              onClick={addSpecification}
+              className="pf-add-spec-btn">
               + Add Specification
             </button>
           </div>
 
           <div className="pf-group">
             <label>Description *</label>
-            <textarea name="description" value={formData.description} onChange={handleInputChange} required />
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              required
+            />
           </div>
 
           <div className="pf-buttons">

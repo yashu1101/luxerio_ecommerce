@@ -2,29 +2,19 @@ import { Link } from "react-router-dom";
 import "./ProductCategory.css";
 import { api } from "../../api/axios";
 import { useState, useEffect } from "react";
+import { useCategory } from "../../hooks/useCategory";
 
 export const ProductCategory = () => {
   const [category, setCategory] = useState();
   const [error, setError] = useState();
+  const { data: categories} = useCategory()
 
-  // fetch category data
-  const fetchData = async () => {
-    try {
-      const res = await api.get("categories");
-      setCategory(res.data);
-    } catch (error) {
-      setError(error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  
 
   // render categories
   return (
     <div className="category-slider">
-      {category?.map((item) => {
+      {categories?.map((item) => {
         return (
           <Link to={`/category/${item.slug}`} key={item._id}>
             <div className="category-card">

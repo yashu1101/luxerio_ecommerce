@@ -6,24 +6,42 @@ export const useAddWishlist = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (productId) => {
-      const exist = data?.find((item) => item._id === productId);
-      if (exist) {
-        console.log("Item already added.");
-      }
+      
       const res = await api.post("wishlist", {
         productId: productId,
       });
-
+      
       return res.data;
     },
-
+    
     onSuccess: (data) => {
-      queryClinet.invalidateQueries({ queryKey: ["wishlist"] });
-      console.log(data);
+      queryClient.invalidateQueries({ queryKey: ["wishlist"] });
+      console.log(data?.message || "Item added to wishlist.");
     },
-
+    
     onError: (error) => {
-      console.log(error?.response?.data?.message || "Somthing went wrong!");
+      console.log(error?.response?.data?.message || "Something went wrong!");
     },
   });
 };
+
+
+// DELETE WISHLIST HOOK
+
+export const useDeleteWishlist = ()=>{
+  const queryClient = useQueryClient();
+   return useMutation({
+    mutationFn: async (productId) => {
+      const res = await api.delete(`wishlist/${productId}`);
+      return res?.data;
+    },
+
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["wishlist"]});
+      console.log(data?.message || "Item deleted from wishlist");
+    },
+    onError: (error) => {
+      console.log(error?.response?.data?.message || "Something went wrong!");
+    },
+  });
+}

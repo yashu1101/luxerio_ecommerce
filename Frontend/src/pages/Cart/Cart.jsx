@@ -1,34 +1,33 @@
 import "./Cart.css";
 import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { CartContext } from "../../Context/CartContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
+import { useCart } from "../../hooks/useCart";
+import {
+  useDecreaseCart,
+  useDeleteCart,
+  useIncreaseCart,
+} from "../../hooks/useCartAction";
 
 export const Cart = () => {
-  const {
-    message,
-    data,
-    isError,
-    isLoading,
-    isIncreasePending,
-    isDecreasePending,
-    error,
-    decreaseQuantity,
-    decreaseData,
-    increaseQuantity,
-    ItemQuantity,
-    RemoveFromCart,
-    loadingCart,
-  } = useContext(CartContext);
   const navigate = useNavigate();
   const { user, loading } = useContext(AuthContext);
 
-  // console.log(data);
+  const { data, isLoading, error } = useCart();
+  const { mutate: deleteCartMutate, isPending: deleteCartPending } =
+    useDeleteCart();
+  const { mutate: increaseCartMutate, isPending: increaseCartPending } =
+    useIncreaseCart();
+  const { mutate: decreaseCartMutate, isPending: decreaseCartPending } =
+    useDecreaseCart();
 
+  // console.log(data);
 
   // Redirect to login page if user not logged In.
   useEffect(() => {
@@ -64,12 +63,19 @@ export const Cart = () => {
 
           {data?.map((item) => {
             return (
-              <div className="cart-item" key={item._id}>
+              <motion.div
+                className="cart-item"
+                key={item._id}
+                initial={{ opacity: 0, translateX: -50 }}
+                animate={{ opacity: 1, translateX: 0 }}
+                exit={{ opacity: 0, translateX: 50 }}
+                transition={{ duration: 0.3, ease: "easeIn" }}>
+                  
                 <FontAwesomeIcon
                   className="cart-item-remove-btn"
                   icon={faXmark}
                   onClick={() => {
-                    RemoveFromCart(item.product._id);
+                    deleteCartMutate(item.product._id);
                   }}></FontAwesomeIcon>
                 <div className="cart-item-img-container">
                   <img
@@ -94,22 +100,22 @@ export const Cart = () => {
                   <div className="cart-item-quantity-container ">
                     <FontAwesomeIcon
                       icon={faMinus}
-                      className={`cart-item-decrease ${isDecreasePending ? "cart-item-quantity-disabled" : ""}`}
+                      className={`cart-item-decrease ${decreaseCartPending ? "cart-item-quantity-disabled" : ""}`}
                       onClick={() => {
-                        decreaseQuantity(item.product._id);
+                        decreaseCartMutate(item.product._id);
                       }}></FontAwesomeIcon>
                     <span className="cart-item-quantity-value">
                       Q : {item.quantity}
                     </span>
                     <FontAwesomeIcon
                       icon={faPlus}
-                      className={`cart-item-increase ${isIncreasePending ? "cart-item-quantity-disabled" : ""}`}
+                      className={`cart-item-increase ${increaseCartPending ? "cart-item-quantity-disabled" : ""}`}
                       onClick={() => {
-                        increaseQuantity(item.product._id);
+                        increaseCartMutate(item.product._id);
                       }}></FontAwesomeIcon>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

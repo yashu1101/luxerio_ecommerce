@@ -1,41 +1,57 @@
 import "./Auth.css";
 
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
-import { AuthContext } from "../../Context/AuthContext";
+import { motion } from "framer-motion";
+
+import { useState } from "react";
+import { useSignup } from "../../hooks/useAuth";
 
 export const Signup = () => {
   const [AuthName, setAuthName] = useState("");
   const [AuthEmail, setAuthEmail] = useState("");
   const [AuthPassword, setAuthPassword] = useState("");
 
-  const { UserSignup, updateMessage, setUpdateMessage, signupButtonDisabled } =
-    useContext(AuthContext);
+  const { mutate: signupMutate, isPending, error } = useSignup();
 
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const SignupFormHandler = async (e) => {
     e.preventDefault();
-    const result = await UserSignup(AuthName, AuthEmail, AuthPassword);
-    if (result.success) {
-      setTimeout(() => {
-        setUpdateMessage("");
-        navigate("/auth/login");
-      }, 1500);
-    }
+
+    signupMutate(
+      {
+        username: AuthName,
+        email: AuthEmail,
+        password: AuthPassword,
+      },
+      {
+        onSuccess: () => {
+          navigate("/auth/login");
+        },
+        onError: (error) => {
+          setMessage(error?.response?.data?.message || "Signup failed!");
+          setTimeout(() => {
+            setMessage("");
+          }, 3000);
+        },
+      },
+    );
   };
 
   return (
     <>
-      <div className="auth">
+      <motion.div
+        className="auth"
+        initial={{ opacity: 0, translateX: -50 }}
+        animate={{ opacity: 1,  translateX: 0  }}
+        exit={{ opacity: 0, translateX: 50 }}
+        transition={{ duration: 0.3, ease: "easeIn" }}>
         <div className="auth-form-pannel">
           <span className="login-title">Create new account</span>
 
           <form onSubmit={SignupFormHandler} className="auth-form">
-            {updateMessage.type === "signup" && (
-              <span style={{ color: updateMessage.color }}>
-                {updateMessage.message}
-              </span>
-            )}
+            <span style={{ color: "red" }}>{message}</span>
+
             <input
               onChange={(e) => setAuthName(e.target.value)}
               className="auth-form-field name-field"
@@ -64,7 +80,7 @@ export const Signup = () => {
             />
 
             <button
-              className={`auth-form-signup-button ${signupButtonDisabled ? "auth-form-signup-button-disabled" : ""}`}>
+              className={`auth-form-signup-button ${isPending ? "auth-form-signup-button-disabled" : ""}`}>
               SIGNUP
             </button>
 
@@ -73,7 +89,7 @@ export const Signup = () => {
             </Link>
           </form>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 };

@@ -23,7 +23,7 @@ export { MyOrderView } from './MyOrder/MyOrderView/MyOrderView'
 
 // Admin Pages
 
-export { Admin } from './Admin/admin'
+// export { Admin } from './Admin/admin'
 export { Dashboard } from './Admin/Dashboard/Dashboard'
 export { Products } from './Admin/Products/Products'
 export { ProductForm } from './Admin/Products/ProductForm'

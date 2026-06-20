@@ -4,10 +4,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthContext";
+import { useUser } from "../../hooks/useUser";
+import { useLogout } from "../../hooks/useAuth";
 export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
-  const { user, UserLogout } = useContext(AuthContext);
+ ;
   const { sidebarHideOnElementClick, setSidebarHideOnElementClick } =
     useState(false);
+
+    const {data: user} = useUser()
+    const {mutate: logoutMutate} = useLogout()
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -40,7 +45,7 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
           {user?.username || ""}
         </span>
         <span className="admin-sidebar-profile-role">Role: {user?.role}</span>
-        <span className="admin-sidebar-profile-logout" onClick={adminLogout}>
+        <span className="admin-sidebar-profile-logout" onClick={logoutMutate}>
           LOGOUT
         </span>
       </div>

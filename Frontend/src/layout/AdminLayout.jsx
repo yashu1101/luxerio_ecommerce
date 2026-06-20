@@ -10,19 +10,18 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../Context/AuthContext";
 import { AccessDenied } from "../pages";
 import { Loader } from "../components/Loader/Loader";
+import { useUser } from "../hooks/useUser";
 
 export const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const { user, loading } = useContext(AuthContext);
+  const { data: user, isLoading } = useUser();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-
   // loading
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="admin-loading-container">
         <Loader></Loader>
@@ -31,7 +30,7 @@ export const AdminLayout = () => {
   }
 
   // Access denied
-  if (user?.role !== "admin") {
+  if (!isLoading && user?.role !== "admin") {
     return <AccessDenied></AccessDenied>;
   }
   return (

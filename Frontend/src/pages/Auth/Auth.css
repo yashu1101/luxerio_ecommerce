@@ -4,6 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  scrollbar-width: none;
 }
 
 .auth-form-pannel {
@@ -117,7 +118,7 @@
   transition: all 0.3s ease;
 }
 .auth-form-login-button:hover {
-  background: #ff713d7a;
+  background: #2692ff;
   transition: all 0.3s ease;
 }
 
@@ -125,6 +126,7 @@
 .auth-form-login-button-disabled {
  opacity: 0.5;
  pointer-events: none;
+ 
  transition: all 0.3s ease;
 }
 .auth-form-signup-button-disabled {

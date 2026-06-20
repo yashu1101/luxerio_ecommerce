@@ -1,42 +1,35 @@
-import { useContext, useEffect } from "react";
-import { WishlistContext } from "../../Context/WishlistContext";
-import { CartContext } from "../../Context/CartContext";
+import { useEffect } from "react";
 import "./Wishlist.css";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
+import { useWishlist } from "../../hooks/useWishlist";
+import { useDeleteWishlist } from "../../hooks/useWishlistAction";
+import { useUser } from "../../hooks/useUser";
+import { useAddCart } from "../../hooks/useCartAction";
 
 export const Wishlist = () => {
-  const { wishlistItem, data, isError, isLoading, removeWishlistItem, loadingWishlist, getWishlistItem } =
-    useContext(WishlistContext);
-  const { user,loading } = useContext(AuthContext);
- 
-  const { AddToCart, cartPopup } = useContext(CartContext);
 
+
+  const { data: userData, isLoading: userLoading } = useUser();
+  const { data, isLoading, error } = useWishlist();
+  const { mutate: deleteWishlistMutate, isPending } = useDeleteWishlist();
+  const {mutate: addToCartMutate} = useAddCart()
 
   const navigate = useNavigate();
-
-
-
-  useEffect(() => {
-    getWishlistItem();
-  }, []);
 
   // Redirect to login page if user not logged In.
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!userLoading && !userData) {
       navigate("/auth/login", { replace: true });
     }
-  }, [user, loading, navigate]);
-
-  // console.log(data)
+  }, [userData, userLoading, navigate]);
 
   // Loading
 
-if(isLoading) return <Loader height="100dvh" />
+  if (isLoading) return <Loader height="100dvh" />;
 
   return (
     <>
@@ -76,7 +69,7 @@ if(isLoading) return <Loader height="100dvh" />
                   <FontAwesomeIcon
                     icon={faCartShopping}
                     onClick={() => {
-                      AddToCart(item._id);
+                     addToCartMutate(item._id);
                     }}
                     className="wishlist-cart-btn"></FontAwesomeIcon>
                 </div>
@@ -84,7 +77,7 @@ if(isLoading) return <Loader height="100dvh" />
               <FontAwesomeIcon
                 icon={faXmark}
                 className="wishlist-remove-btn"
-                onClick={() => removeWishlistItem(item._id)}>
+                onClick={() => deleteWishlistMutate(item._id)}>
                 {" "}
               </FontAwesomeIcon>
             </div>

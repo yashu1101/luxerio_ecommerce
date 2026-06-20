@@ -1,30 +1,27 @@
-import { useParams, Link, useNavigate, Outlet } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import "./ViewProduct.css";
 
-import { Navbar } from "../../components/Navbar/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faHeart,
-  faStar,
-  faCartShopping,
-} from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useContext, useState } from "react";
-import { WishlistContext } from "../../Context/WishlistContext";
-import { CartContext } from "../../Context/CartContext";
-import { PopupBox } from "../../components/PopupBox/PopupBox";
+
 import { Reviews } from "../../components/Reviews/Reviews";
 import { api } from "../../api/axios";
-import { useEffect } from "react";
-import { AuthContext } from "../../Context/AuthContext";
-import { ProductContext } from "../../Context/ProductsContext";
 import { Loader } from "../../components/Loader/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { Placeholder } from "../../components/Placeholder/Placeholder";
+import { useAddWishlist } from "../../hooks/useWishlistAction";
+import { useUser } from "../../hooks/useUser";
+import { useAddCart } from "../../hooks/useCartAction";
 
 export const ViewProduct = () => {
   const { productId } = useParams();
 
-  const { user } = useContext(AuthContext);
+  const { data: userData } = useUser();
+
+  const { mutate: AddToWishlistMutate, isPending: addWishlistPending } =
+    useAddWishlist();
+  const { mutate: AddCartMutate, isPending: addCartPending } = useAddCart();
 
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
@@ -40,51 +37,50 @@ export const ViewProduct = () => {
   });
 
   const navigate = useNavigate();
-  // show all reviews
+ 
 
-  const { AddToWishlist } = useContext(WishlistContext);
-  const { popup } = useContext(WishlistContext);
-  const { cartPopup, AddToCart } = useContext(CartContext);
+  
+
 
   // loading
   if (isLoading) return <Loader height={"100dvh"}></Loader>;
-  // console.log(data)
+
   return (
     <>
       <div className="product-info">
         <div className="product-images-container">
           <div className="product-images">
-            {user?.role !== "admin" && (
+            {userData?.role !== "admin" && (
               <button
                 onClick={() => {
-                  AddToWishlist(data?._id);
+                  AddToWishlistMutate(data?._id);
                 }}
-                className="add-to-wishlist-btn">
+                className="add-to-wishlist-btn"
+                disabled={addWishlistPending}>
                 <FontAwesomeIcon
                   className="wishlist-icon"
                   icon={faHeart}></FontAwesomeIcon>
               </button>
             )}
 
-           
-           <div className="product-image-wrapper" >
-             {!isImageLoaded && (
-            <div className="image-placeholder">
-              <Placeholder />
+            <div className="product-image-wrapper">
+              {!isImageLoaded && (
+                <div className="image-placeholder">
+                  <Placeholder />
+                </div>
+              )}
+              <img
+                className="product-image"
+                src={data?.thumbnail}
+                alt="img"
+                onLoad={() => {
+                  setIsImageLoaded(true);
+                }}
+                style={{ display: isImageLoaded ? "block" : "none" }}
+              />
             </div>
-          )}
-             <img
-              className="product-image"
-              src={data?.thumbnail}
-              alt="img"
-              onLoad={() => {
-                setIsImageLoaded(true);
-              }}
-              style={{display: isImageLoaded ? 'block' : 'none'}}
-            />
-           </div>
           </div>
-          {user?.role !== "admin" && (
+          {userData?.role !== "admin" && (
             <div className="product-action-buttons">
               <Link
                 className="product-action-button card-buy-btn"
@@ -93,9 +89,11 @@ export const ViewProduct = () => {
               </Link>
               <button
                 onClick={() => {
-                  AddToCart(data?._id);
+                  AddCartMutate(data?._id);
                 }}
-                className="product-action-button add-to-cart-btn">
+                className="product-action-button add-to-cart-btn"
+                disabled={addCartPending}>
+                  
                 Add To Cart
               </button>
             </div>
@@ -139,7 +137,7 @@ export const ViewProduct = () => {
         </div>
       </div>
 
-      {user?.role !== "admin" && (
+      {userData?.role !== "admin" && (
         <div className="reviews-section">
           <div className="reviews-container">
             <div className="product-reviews">

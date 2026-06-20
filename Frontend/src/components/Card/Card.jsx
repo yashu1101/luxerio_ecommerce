@@ -1,9 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
-import { useContext, useState } from "react";
-import { WishlistContext } from "../../Context/WishlistContext";
-import { CartContext } from "../../Context/CartContext";
+import { useState } from "react";
+
 
 import "./Card.css";
 import {
@@ -12,6 +11,8 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Placeholder } from "../Placeholder/Placeholder";
+import { useAddWishlist } from "../../hooks/useWishlistAction";
+import { useAddCart } from "../../hooks/useCartAction";
 export const Card = ({
   productId,
   src,
@@ -22,15 +23,22 @@ export const Card = ({
   wishlist,
   cart,
 }) => {
-  const { AddToWishlist, isInWishlist } = useContext(WishlistContext);
-  const { AddToCart, isInCart } = useContext(CartContext);
+  const {
+    mutate: AddToWishlistMutate,
+    isPending,
+    error: wishlistError,
+  } = useAddWishlist();
+
+  const { mutate: AddCartMutate, error: cartError } = useAddCart();
+
+  // const { AddToCart, isInCart } = useContext(CartContext);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   return (
     <>
       {" "}
       <div className="card">
         <FontAwesomeIcon
-          onClick={() => AddToWishlist(wishlist)}
+          onClick={() => AddToWishlistMutate(wishlist)}
           className="card-wishlist-btn-icon-mobile"
           icon={faHeart}></FontAwesomeIcon>
 
@@ -69,15 +77,15 @@ export const Card = ({
         <div className="card-overlay">
           <button className="card-wishlist-btn">
             <FontAwesomeIcon
-              className={`card-wishlist-btn-icon  ${isInWishlist(wishlist) && "card-wishlist-btn-icon-active"} `}
-              onClick={() => AddToWishlist(wishlist)}
+              className={`card-wishlist-btn-icon  ${"card-wishlist-btn-icon-active"} `}
+              onClick={() => AddToWishlistMutate(wishlist)}
               icon={faHeart}></FontAwesomeIcon>
           </button>
 
           <button className="card-cart-btn">
             <FontAwesomeIcon
-              onClick={() => AddToCart(cart)}
-              className={`card-cart-btn-icon  ${isInCart(cart) && "card-cart-btn-icon-active"} `}
+              onClick={() => AddCartMutate(cart)}
+              className={`card-cart-btn-icon  ${"card-cart-btn-icon-active"} `}
               icon={faCartShopping}></FontAwesomeIcon>
           </button>
         </div>

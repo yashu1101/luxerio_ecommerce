@@ -1,15 +1,9 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
 import { Card } from "../../components/Card/Card";
 import "./ShowProduct.css";
-import { Navbar } from "../../components/Navbar/Navbar";
 import { Filter } from "../../components/Filter/Filter";
 import { useContext } from "react";
-import { CartContext } from "../../Context/CartContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
 
 import { ProductContext } from "../../Context/ProductsContext";
 import { Pagination } from "../../components/Pagination/Pagination";
