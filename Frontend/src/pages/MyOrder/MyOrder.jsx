@@ -1,43 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./MyOrder.css";
-import { api } from "../../api/axios";
 import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
+import { useOrderSingle } from "../../hooks/useOrder";
+import {useUser} from '../../hooks/useUser'
 
 export const MyOrder = () => {
-  const [orders, setOrders] = useState([]);
-  const { user, loading } = useContext(AuthContext);
-  const [loadingOrders, setLoadingOrders] = useState(false);
-  // const [loading,setLoading]
 
-  const getOrder = async () => {
-    try {
-      setLoadingOrders(true);
-      const res = await api.get("orders");
-      setOrders(res?.data?.orders);
-    } catch (error) {
-      console.log(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoadingOrders(false);
-    }
-  };
+  const {data: userData, isLoading: userLoading}  = useUser()
+
+  const { data, isLoading, erorr } = useOrderSingle();
 
   const navigate = useNavigate();
   // Redirect to login page if user not logged In.
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!userData && !userLoading) {
       navigate("/auth/login", { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [userData, userLoading, navigate]);
 
-  useEffect(() => {
-    getOrder();
-  }, []);
-
-  if (loadingOrders) {
-    return <Loader height={'100dvh'} ></Loader>;
+  if (isLoading) {
+    return <Loader height={"100dvh"}></Loader>;
   }
 
   return (
@@ -46,7 +31,7 @@ export const MyOrder = () => {
         <h3>My Orders</h3>
       </div>
       <div className="myorder-container">
-        {orders?.map((order) => {
+        {data?.map((order) => {
           return (
             <Link className="myorder-link" to={`${order._id}`} key={order?._id}>
               <div

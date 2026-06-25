@@ -45,7 +45,7 @@ export const userRegister = async (req, res) => {
         delete userResponse.password;
 
         res.status(201).json({
-            message: "You have been registered.",
+            message: "You have been signed up.",
             data: userResponse,
         });
 
@@ -71,11 +71,11 @@ export const userLogin = async (req, res) => {
 
         // check user exist or not 
         const user = await User.findOne({ email });
-        if (!user) return res.status(401).json({ message: "Invalid credentials!" });
+        if (!user) return res.status(401).json({ message: "Invalid email or password!" });
         // match user password
         const hashedPassword = user.password
         const isMatch = await bcrypt.compare(password, hashedPassword)
-        if (!isMatch) return res.status(401).json({ message: "Invalid crendentials!" })
+        if (!isMatch) return res.status(401).json({ message: "Invalid email or password!" })
         // generate jwt token 
 
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY)
@@ -92,7 +92,8 @@ export const userLogin = async (req, res) => {
         })
             .status(200)
             .json({
-                message: "Login successful",
+                message: "You have been logged In.",
+                role: user.role
 
             });
 

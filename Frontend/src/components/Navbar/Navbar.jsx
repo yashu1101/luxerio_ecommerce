@@ -3,6 +3,8 @@ import {
   faUser,
   faHeart,
   faShoppingCart,
+  faBarsStaggered,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 
@@ -84,7 +86,7 @@ export const Navbar = ({ adaptive }) => {
                 </span>
               </Link>
             </li>
-            <li className="nav-action-btn">
+            {/* <li className="nav-action-btn">
               <Link to="/wishlist" style={{ color: "inherit" }}>
                 <FontAwesomeIcon className="nav-action-icon" icon={faHeart} />
               </Link>
@@ -97,14 +99,21 @@ export const Navbar = ({ adaptive }) => {
                   icon={faShoppingCart}
                 />
               </Link>
-            </li>
+            </li> */}
             <li
               className="nav-action-btn"
               onMouseOver={ShowSidebar}
               onMouseLeave={HideSidebar}
               onClick={ToggleSidebar}>
-              <FontAwesomeIcon className="nav-action-icon" icon={faUser} />
+              <FontAwesomeIcon className="nav-action-icon" icon={faBarsStaggered} />
             </li>
+            {/* <li
+              className="nav-action-btn"
+              onMouseOver={ShowSidebar}
+              onMouseLeave={HideSidebar}
+              onClick={ToggleSidebar}>
+              <FontAwesomeIcon className="nav-action-icon" icon={faSearch} />
+            </li> */}
           </div>
 
           {/* ==================== SIDEBAR ==================== */}

@@ -2,7 +2,7 @@
   position: relative;
 
   display: flex;
-  
+
   padding: 0 10px;
   flex-direction: column;
   width: 100%;
@@ -11,46 +11,48 @@
 }
 
 .searchbar {
+  display: flex;
+  align-items: center;
+  position: relative;
   width: 100%;
 }
 .search-box {
-     width: 100%;
-    background: #eeeeee;
-    padding: 10px 20px;
-    border: 1px solid #80808000;
-    border-radius: 50px;
+  width: 100%;
+  background: #eeeeeea3;
+  padding: 10px 20px;
+  border: 1px solid #80808000;
+  border-radius: 50px;
 }
-.search-box:focus{
+.search-box:focus {
   outline: none;
   border: 1px solid #80808076;
 }
 
 .search-button {
   position: absolute;
-  top: 10px;
+  width: 30px;
+  height: 30px;
+  /* top: 10px; */
+  padding: 10px;
+  border-radius: 100px;
   font-size: 0.9rem;
-  right: 17px;
+  right: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--gradient-color);
 }
 .search-button.disabled {
-  opacity: 0.5;
-   position: absolute;
-  top: 12px;
-  font-size: 0.9rem;
-  right: 17px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none; /* Click disable karega */
-  cursor: not-allowed;
+  /* opacity: 0.5; */
 
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
-.search-icon{
+.search-icon {
   text-decoration: none;
   color: #3c3c3c;
+  color: white;
 }
 
 .searched-item {
@@ -83,26 +85,25 @@
 }
 
 @media (max-width: 480px) {
- .search-button {
-  position: absolute;
-  top: 10px;
-  font-size: 1.2rem;
-  right: 17px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.search-button.disabled {
-  opacity: 0.5;
-   position: absolute;
-  top: 12px;
-  font-size: 1.2rem;
-  right: 17px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none; 
-  cursor: not-allowed;
-
-}
+  .search-button {
+    position: absolute;
+    
+    font-size: 1.2rem;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* .search-button.disabled {
+    opacity: 0.5;
+    position: absolute;
+    top: 12px;
+    font-size: 1.2rem;
+    right: 17px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    cursor: not-allowed;
+  } */
 }

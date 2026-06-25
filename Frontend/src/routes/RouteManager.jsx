@@ -1,5 +1,4 @@
-import { Routes, Route, Outlet, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
+import { Routes, Route } from "react-router-dom";
 import { AppLayout } from "../layout/AppLayout";
 import { AdminLayout } from "../layout/AdminLayout";
 import { AuthLayout } from "../layout/AuthLayout";
@@ -29,14 +28,15 @@ import {
   ForgotPassword,
   Profile,
 } from "../pages";
+import { AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 export const RouteManager = () => {
-
-  const location = useLocation()
+  const loaction = useLocation()
   return (
     <>
-      <AnimatePresence mode="wait" >
-        <Routes location={location} key={location.pathname}  >
+      <AnimatePresence mode="wait" initial={false}>
+        <Routes location={location} key={location.pathname} >
           <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />}></Route>
 

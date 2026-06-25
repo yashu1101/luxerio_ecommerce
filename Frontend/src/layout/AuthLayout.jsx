@@ -1,9 +1,5 @@
 import { Outlet } from "react-router-dom";
 
 export const AuthLayout = () => {
-  return (
-    <>
-      <Outlet></Outlet>
-    </>
-  );
+  return <Outlet></Outlet>;
 };

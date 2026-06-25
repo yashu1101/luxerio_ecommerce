@@ -10,9 +10,8 @@
 :root {
   --text-color: black;
   --font-family: "Inter";
-
-
   --primary-color: #26c0ff;
+  --primary-color: #0094ff;
   --transparent-color: #ffffff57;
   --gradient-color: linear-gradient(45deg, #26c0ff, #4857ff);
 }

@@ -27,8 +27,8 @@ export const Loader = ({height}) => {
               className="loader__eye2"></circle>
           </clipPath>
           <linearGradient y2="1" x2="0" y1="0" x1="0" id="loader-grad">
-            <stop stop-color="#000" offset="0%"></stop>
-            <stop stop-color="#ffffff" offset="100%"></stop>
+            <stop stopColor="#000" offset="0%"></stop>
+            <stop stopColor="#ffffff" offset="100%"></stop>
           </linearGradient>
           <mask id="loader-mask">
             <rect
@@ -40,12 +40,12 @@ export const Loader = ({height}) => {
           </mask>
         </defs>
         <g
-          stroke-dasharray="175.93 351.86"
-          stroke-width="12"
-          stroke-linecap="round">
+          strokeDasharray="175.93 351.86"
+          strokeWidth="12"
+          strokeLinecap="round">
           <g>
             <rect
-              clip-path="url(#loader-eyes)"
+              clipPath="url(#loader-eyes)"
               height="64"
               width="128"
               fill="#26c0ff"></rect>
@@ -66,7 +66,7 @@ export const Loader = ({height}) => {
           </g>
           <g mask="url(#loader-mask)">
             <rect
-              clip-path="url(#loader-eyes)"
+              clipPath="url(#loader-eyes)"
               height="64"
               width="128"
               fill="hsl(46.56deg 100% 64.12%)"></rect>

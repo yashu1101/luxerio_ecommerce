@@ -1,5 +1,5 @@
 import { api } from "../api/axios";
-import { useQuery } from "@tanstack/react-query"; 
+import { useQuery } from "@tanstack/react-query";
 
 export const useProduct = ({
   search = "",

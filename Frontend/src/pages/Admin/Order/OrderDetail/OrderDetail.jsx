@@ -1,77 +1,55 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { api } from "../../../../api/axios";
 import "./OrderDetail.css";
 import { DateFormator } from "../../../../utility/DateFormator";
 import { Loader } from "../../../../components/Loader/Loader";
+import { useOrderView } from "../../../../hooks/useOrder";
+import { useUpdateOrderStatus } from "../../../../hooks/useOrderAction";
 
 export function OrderDetail() {
   const [status, setStatus] = useState("");
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [orderData, setOrderData] = useState({});
+
   const [message, setMessage] = useState("");
-  const [statusValue, setStatusValue] = useState("");
-  const [orderDataLoading, setOrderDataLoading] = useState(false);
+
   const { orderId } = useParams();
 
-  const handleStatusChange = (e) => {
-    setStatus(e.target.value);
-    setSaved(false);
-  };
-  // api for view order detail
-
-  const orderDetail = async () => {
-    try {
-      setOrderDataLoading(true);
-      const res = await api.get(`orders/view/${orderId}`);
-      setOrderData(res?.data?.order);
-    } catch (error) {
-      console.error(error.response.data.message || "Something went wrong!");
-    } finally {
-      setOrderDataLoading(false);
-    }
-  };
+  // VIEW ORDER
+  const { data, isLoading } = useOrderView(orderId);
+  //SET INITIAL STATUS VALUE
+  const [statusValue, setStatusValue] = useState("");
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    orderDetail();
-  }, [orderId]);
-
-  // Get first letter of Name
-  const fullname = orderData?.user?.username;
-  const first_letter = fullname?.split("")[0].toUpperCase();
-
-  // updat order status
-
-  const updateStatus = async (orderId, orderStatus) => {
-    try {
-      const res = await api.patch("orders/update", {
-        orderId: orderId,
-        orderStatus: orderStatus,
-      });
-      setMessage(res?.data?.message);
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Somthing went wrong!");
+    if (data?.status) {
+      setStatusValue(data?.status);
     }
-  };
+  }, [data]);
 
-  // handle status value
+  // UPDATE ORDER STATUS
+  const { mutate: orderStatusMutate, isPending } = useUpdateOrderStatus();
+
   const handleOnChange = (e) => {
     setStatusValue(e.target.value);
+    setSaved(false);
   };
 
-  // update status value
-  const handleSave = async () => {
-    await updateStatus(orderId, statusValue);
-    orderDetail();
-
-    setSaving(true);
-
-    setSaving(false);
-    setSaved(true);
+  const handleSave = () => {
+    orderStatusMutate(
+      { orderId, orderStatus: statusValue },
+      {
+        onSuccess: () => {
+          setSaved(true);
+        },
+      },
+    );
   };
 
-  return orderDataLoading ? (
+  // Get first letter of Name
+  const fullname = data?.user?.username;
+  const first_letter = fullname?.split("")[0].toUpperCase();
+
+  return isLoading ? (
     <Loader height={"100dvh"}></Loader>
   ) : (
     <div className="od-wrapper">
@@ -79,27 +57,17 @@ export function OrderDetail() {
         <div className="od-header">
           <div className="od-header-left">
             <span className="od-label">Order Details</span>
-            <h1 className="od-order-id">{orderData?._id || "N/A"}</h1>
+            <h1 className="od-order-id">{data?._id || "N/A"}</h1>
           </div>
 
           {/* Status Dropdown */}
           <div className="od-status-control">
             <div
-              className={`od-status-select-wrap status-${status.toLowerCase()}`}>
+              className={`od-status-select-wrap status-${statusValue?.toLowerCase()}`}>
               <span className="od-status-dot" />
               <select
-                className={`od-status-select ${
-                  orderData?.status === "pending"
-                    ? "status-pending"
-                    : orderData?.status === "shipped"
-                      ? "status-shipped"
-                      : orderData?.status === "delivered"
-                        ? "status-delivered"
-                        : orderData?.status === "cancelled"
-                          ? "status-cancelled"
-                          : ""
-                }`}
-                value={orderData?.status}
+                className={`od-status-select status-${statusValue?.toLowerCase()}`}
+                value={statusValue}
                 onChange={handleOnChange}>
                 <option value="pending">Pending</option>
                 <option value="shipped">Shipped</option>
@@ -108,6 +76,7 @@ export function OrderDetail() {
               </select>
               <span className="od-select-arrow">▾</span>
             </div>
+
             <button
               className={`od-save-btn ${saving ? "saving" : ""} ${saved ? "saved" : ""}`}
               onClick={handleSave}
@@ -123,8 +92,8 @@ export function OrderDetail() {
           <div className="od-card">
             <p className="od-card-title">Customer</p>
             <div className="od-avatar">{first_letter}</div>
-            <p className="od-user-name">{orderData?.user?.username || "N/A"}</p>
-            <p className="od-user-email">{orderData?.user?.email || "N/A"}</p>
+            <p className="od-user-name">{data?.user?.username || "N/A"}</p>
+            <p className="od-user-email">{data?.user?.email || "N/A"}</p>
           </div>
 
           {/* Timeline */}
@@ -136,7 +105,7 @@ export function OrderDetail() {
                 <div>
                   <p className="od-tl-label">Order Placed</p>
                   <p className="od-tl-value">
-                    {DateFormator(orderData?.createdAt) || "N/A"}
+                    {DateFormator(data?.createdAt) || "N/A"}
                   </p>
                 </div>
               </div>
@@ -146,7 +115,7 @@ export function OrderDetail() {
                 <div>
                   <p className="od-tl-label">Delivery Date</p>
                   <p className="od-tl-value">
-                    {DateFormator(orderData?.deliveryDate) || "N/A"}
+                    {DateFormator(data?.deliveryDate) || "N/A"}
                   </p>
                 </div>
               </div>
@@ -160,9 +129,7 @@ export function OrderDetail() {
               <span className="od-info-icon">💳</span>
               <div>
                 <p className="od-tl-label">Payment Method</p>
-                <p className="od-tl-value">
-                  {orderData?.paymentMethod || "N/A"}
-                </p>
+                <p className="od-tl-value">{data?.paymentMethod || "N/A"}</p>
               </div>
             </div>
             <div className="od-divider" />
@@ -171,10 +138,10 @@ export function OrderDetail() {
               <div>
                 <p className="od-tl-label">Shipping Address</p>
                 <p className="od-tl-value od-address">
-                  {orderData?.address?.addressLine || "N/A"},{" "}
-                  {orderData?.address?.city || "N/A"},{" "}
-                  {orderData?.address?.state || "N/A"} -{" "}
-                  {orderData?.address?.pincode || "N/A"}
+                  {data?.address?.addressLine || "N/A"},{" "}
+                  {data?.address?.city || "N/A"},{" "}
+                  {data?.address?.state || "N/A"} -{" "}
+                  {data?.address?.pincode || "N/A"}
                 </p>
               </div>
             </div>
@@ -198,7 +165,7 @@ export function OrderDetail() {
               </thead>
               <tbody>
                 {/* replace these rows with your api data using .map() */}
-                {orderData?.items?.map((item, index) => {
+                {data?.items?.map((item, index) => {
                   return (
                     <tr key={item._id}>
                       <td className="od-td-num">{index + 1}</td>
@@ -225,9 +192,7 @@ export function OrderDetail() {
 
           <div className="od-total-row">
             <span className="od-total-label">Total Amount</span>
-            <span className="od-total-value">
-              ₹{orderData?.totalPrice || "N/A"}
-            </span>
+            <span className="od-total-value">₹{data?.totalPrice || "N/A"}</span>
           </div>
         </div>
       </div>

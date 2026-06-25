@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useUser } from "../../hooks/useUser";
 import { useLogin } from "../../hooks/useAuth";
 import { Loader } from "../../components/Loader/Loader";
+import { AuthAnimation } from "../../components/Animations/AuthAnimation";
 
 export const Login = () => {
   const [AuthEmail, setAuthEmail] = useState("");
@@ -62,51 +63,54 @@ export const Login = () => {
   };
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, translateX: -50 }}
-        animate={{ opacity: 1, translateX: 0 }}
-        exit={{ opacity: 0, translateX: 50 }}
-        transition={{duration: 0.3, ease:"easeIn"}}
-        className="auth">
-        <div className="auth-form-pannel">
-          <span className="login-title">Login</span>
+      <AuthAnimation>
+        <div className="auth">
+          <div className="auth-form-pannel">
+            <motion.span
+              initial={{ opacity: 0, translateY: 20 }}
+              animate={{ opacity: 1, translateY: 0 }}
+              transition={{ duration: 0.5, ease: "ease", delay: 0.1 }}
+              className="login-title">
+              Login
+            </motion.span>
 
-          <form onSubmit={LoginFormHandler} className="auth-form">
-            <span style={{ color: "red" }}>{message}</span>
+            <form onSubmit={LoginFormHandler} className="auth-form">
+              <span style={{ color: "red" }}>{message}</span>
 
-            <input
-              className="auth-form-field email-field"
-              type="email"
-              required
-              onChange={(e) => setAuthEmail(e.target.value)}
-              placeholder="Enter email"
-            />
+              <input
+                className="auth-form-field email-field"
+                type="email"
+                required
+                onChange={(e) => setAuthEmail(e.target.value)}
+                placeholder="Enter email"
+              />
 
-            <input
-              className="auth-form-field password-field"
-              type="text"
-              required
-              onChange={(e) => setAuthPassword(e.target.value)}
-              placeholder="Enter password"
-            />
+              <input
+                className="auth-form-field password-field"
+                type="text"
+                required
+                onChange={(e) => setAuthPassword(e.target.value)}
+                placeholder="Enter password"
+              />
 
-            <button
-              className={`auth-form-login-button ${
-                isPending && "auth-form-login-button-disabled"
-              }`}>
-              LOGIN
-            </button>
+              <button
+                className={`auth-form-login-button ${
+                  isPending && "auth-form-login-button-disabled"
+                }`}>
+                LOGIN
+              </button>
 
-            <span className="forget-pass" onClick={ForgetPassword}>
-              Forget paasword ?
-            </span>
+              <span className="forget-pass" onClick={ForgetPassword}>
+                Forget paasword ?
+              </span>
 
-            <Link className="login-text" to={"/auth/signup"}>
-              New customer? signup
-            </Link>
-          </form>
+              <Link className="login-text" to={"/auth/signup"}>
+                New customer? signup
+              </Link>
+            </form>
+          </div>
         </div>
-      </motion.div>
+      </AuthAnimation>
     </>
   );
 };

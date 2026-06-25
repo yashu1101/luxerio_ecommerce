@@ -14,11 +14,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ProductContext } from "../../../Context/ProductsContext";
 import { Loader } from "../../../components/Loader/Loader";
+import { useProduct } from "../../../hooks/useProduct";
 
 export const Products = () => {
   const [products, setProducts] = useState([]);
 
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
@@ -27,23 +28,12 @@ export const Products = () => {
   console.log(currentPage);
 
   //   api for fetch products data
-  const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get(`products?page=${currentPage}&limit=10`);
+ const {data, isLoading, error} = useProduct({
+  search: "",
+  currentPage
+ })
 
-      setProducts(res?.data?.products);
-      setTotalPage(res?.data?.totalPage);
-    } catch (error) {
-      //   setError(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  useEffect(() => {
-    fetchProducts();
-  }, [currentPage]);
 
   const navigate = useNavigate();
 
@@ -88,7 +78,7 @@ export const Products = () => {
           </thead>
 
           <tbody>
-            {products?.map((product) => {
+            {data?.products?.map((product) => {
               return (
                 <tr className="admin-product-table-row" key={product?._id}>
                   <td className="product-table-coll product-img-coll">
@@ -137,7 +127,7 @@ export const Products = () => {
       <div className="admin-products-pagination">
         <Pagination
           currentPage={currentPage}
-          totalPage={totalPage}
+          totalPage={data?.totalPage}
           setCurrentPage={setCurrentPage}></Pagination>
       </div>
     </div>

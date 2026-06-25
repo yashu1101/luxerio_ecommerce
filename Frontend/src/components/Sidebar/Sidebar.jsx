@@ -1,16 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Context/AuthContext";
+import { Link } from "react-router-dom";
 import "./Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faArrowRightFromBracket,
   faCircleInfo,
-  faHeadphones,
   faHeadset,
   faHeart,
-  faPhone,
-  faShoppingBag,
   faShoppingBasket,
   faShoppingCart,
   faUser,
@@ -18,7 +13,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import starImage from "../../assets/icons/stars.png";
-import { useEffect } from "react";
 import { useLogout } from "../../hooks/useAuth";
 import { useUser } from "../../hooks/useUser";
 

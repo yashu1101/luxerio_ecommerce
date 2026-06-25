@@ -1,15 +1,14 @@
 import "./ResetPassword.css";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Context/AuthContext";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { api } from "../../api/axios";
+import { useSetPassword } from "../../hooks/usePasswordResetor";
 export const ResetPassword = () => {
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const { user } = useContext(AuthContext);
-  const { emailId } = useParams();
   const navigate = useNavigate();
+  const { mutate: resetPasswordMutate, isPending } = useSetPassword();
+  const [password, setPassword] = useState("");
+  const [failedMessage, setFailedMessage] = useState("");
+
+  const { emailId } = useParams();
 
   //Change handler
   const handleOnChange = (e) => {
@@ -21,20 +20,17 @@ export const ResetPassword = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const res = await api.patch("auth/reset-password", {
-        email: emailId,
-        password: password,
-      });
-
-      if (res) {
-        navigate("/auth/login");
-      }
-    } catch (error) {
-      setError(error.response.data.message || "Somthing went wrong!");
-      console.log(error.response.data.message || "Somthing went wrong!");
-    }
-    setPassword("");
+    resetPasswordMutate(
+      { emailId, password },
+      {
+        onSuccess: () => {
+          navigate("/auth/login");
+          setPassword("");
+          setFailedMessage("");
+        },
+        onError: () => setFailedMessage("Passward is not reset!"),
+      },
+    );
   };
 
   return (
@@ -42,7 +38,7 @@ export const ResetPassword = () => {
       <div className="rp-container">
         <span className="rp-text">Reset your password</span>
         <form className="rp-form">
-          <span>{error}</span>
+          <span>{failedMessage}</span>
           <input
             type="text"
             className="rp-input"
@@ -50,7 +46,10 @@ export const ResetPassword = () => {
             value={password}
             onChange={handleOnChange}
           />
-          <button className="rp-button" onClick={handleOnSubmit}>
+          <button
+            disabled={isPending}
+            className="rp-button"
+            onClick={handleOnSubmit}>
             Reset Password
           </button>
         </form>

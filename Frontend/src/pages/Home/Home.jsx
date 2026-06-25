@@ -11,12 +11,12 @@ import image3 from "../../assets/carousel/image3.webp";
 import image4 from "../../assets/carousel/image4.webp";
 import image5 from "../../assets/carousel/image5.webp";
 import image6 from "../../assets/carousel/image6.webp";
+import { AppAnimation } from "../../components/Animations/AppAnimation";
 
 export const Home = () => {
   return (
     <>
-     
-       
+      <AppAnimation>
         <HeroSection></HeroSection>
         <ProductCategory> </ProductCategory>
         <Carousel
@@ -37,7 +37,7 @@ export const Home = () => {
           to="/category/laptop"></Slider>
 
         <Footer></Footer>
-     
+      </AppAnimation>
     </>
   );
 };

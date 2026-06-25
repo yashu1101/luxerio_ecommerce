@@ -1,39 +1,34 @@
 import "./OrderSummary.css";
-import { useContext, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useContext, useState } from "react";
 import { CheckoutContext } from "../../Context/CheckoutContext";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { api } from "../../api/axios";
-import { CartContext } from "../../Context/CartContext";
-export const OrderSummary = ({ productId }) => {
-  const { address, paymentMethod, setError, error } =
-    useContext(CheckoutContext);
+import { useCart } from "../../hooks/useCart";
+import { useQuery } from "@tanstack/react-query";
 
-  const { cart } = useContext(CartContext);
+export const OrderSummary = ({ productId }) => {
+  const { address, paymentMethod } = useContext(CheckoutContext);
+
+  const { data: cart } = useCart();
+
   const [items, setItems] = useState({});
 
   // const {productId} = useParams();
 
   // get single item
-  const orderSummaryItem = async () => {
-    try {
+  const { data: singleItem } = useQuery({
+    queryKey: ["singleProduct"],
+    queryFn: async () => {
       const res = await api.get(`products/${productId}`);
-      setItems(res?.data);
-    } catch (error) {
-      setError(error.response.data.message);
-    }
-  };
+      return res?.data;
+    },
+    enabled: !!productId
+  });
 
-  useEffect(() => {
-    orderSummaryItem();
-  }, []);
+  let orderItems = productId ? (singleItem ? [singleItem] : []) : cart;
 
-  // console.log(productId, items);
-
-  let orderItems = productId ? [items] : cart;
-
-  console.log(orderItems);
+  console.log(singleItem);
+  // console.log(cart);
+  // console.log(orderItems)
 
   return (
     <div className="order-summary-container">
@@ -69,7 +64,8 @@ export const OrderSummary = ({ productId }) => {
           <div className="order-summary-detail-totalprice">
             <span>Total Price</span>
             <span>
-              ₹{productId
+              ₹
+              {productId
                 ? items.price
                 : cart
                     .reduce(

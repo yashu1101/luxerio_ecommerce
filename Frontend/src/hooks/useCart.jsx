@@ -8,6 +8,8 @@ export const useCart = () => {
       const res = await api.get("cart");
       return res?.data?.products;
     },
-    staleTime: 5 * 60 * 1000,
+    // staleTime: 5 * 60 * 1000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 };

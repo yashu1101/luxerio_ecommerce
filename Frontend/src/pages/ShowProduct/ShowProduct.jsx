@@ -25,6 +25,7 @@ export const ShowProduct = () => {
     currentPage,
     setCurrentPage,
     totalPage,
+    setTotalPage
   } = useContext(ProductContext);
 
   const { data, isLoading, error } = useProduct({
@@ -33,7 +34,10 @@ export const ShowProduct = () => {
     checkedColors,
     selectedOption,
     selectedPrice,
+    currentPage
   });
+
+  console.log(data)
 
   useEffect(() => {
     setCheckedBrands([]);
@@ -86,7 +90,7 @@ export const ShowProduct = () => {
         <div className="pagination-button-container">
           <Pagination
             currentPage={currentPage}
-            totalPage={totalPage}
+            totalPage={data?.totalPage}
             setCurrentPage={setCurrentPage}></Pagination>
         </div>
       </div>

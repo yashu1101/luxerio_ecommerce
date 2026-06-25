@@ -1,43 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api } from "../../../api/axios";
 import "./Order.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleLeft,
-  faAngleRight,
-  faCancel,
-  faEdit,
-  faEye,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { Loader } from "../../../components/Loader/Loader";
 import { DateFormator } from "../../../utility/DateFormator";
+import { useOrderAll } from "../../../hooks/useOrder";
 
 export const Order = () => {
-  const [orders, setOrders] = useState([]);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  //   api for fetch orders
 
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get("orders/all");
-      setOrders(res?.data?.orders);
-    } catch (error) {
-      setError(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data, isLoading, error } = useOrderAll()
+  // console.log(data)
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-  console.log(orders);
 
   //  navigate to orede details page
   const navigate = useNavigate();
@@ -47,7 +22,7 @@ export const Order = () => {
 
   // Loading
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="admin-orders-container">
         <Loader></Loader>
@@ -59,7 +34,6 @@ export const Order = () => {
     <div className="admin-orders-container">
       <div className="admin-orders-header">
         <span className="admin-orders-heading">Orders</span>
-      
       </div>
       <div className="admin-orders-table-container">
         <table className="admin-orders-table">
@@ -80,7 +54,7 @@ export const Order = () => {
           </thead>
 
           <tbody>
-            {orders?.map((order) => {
+            {data?.map((order) => {
               return (
                 <tr className="admin-order-table-row" key={order?._id}>
                   <td className="order-table-coll order-id-coll ">
@@ -97,12 +71,9 @@ export const Order = () => {
                     {`${order?.address?.city}, ${order?.address?.state} `}
                   </td>
                   <td className="order-table-coll order-item-coll ">
-                    {
-                     
-                      order?.items?.length > 10
-                        ? "10+ items"
-                        : order?.items?.length + " items"
-                    }
+                    {order?.items?.length > 10
+                      ? "10+ items"
+                      : order?.items?.length + " items"}
                   </td>
 
                   <td className="order-table-coll order-totalprice-coll ">
@@ -151,7 +122,6 @@ export const Order = () => {
           </tbody>
         </table>
       </div>
-      
     </div>
   );
 };

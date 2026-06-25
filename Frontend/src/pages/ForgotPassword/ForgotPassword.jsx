@@ -1,15 +1,15 @@
 import "./ForgotPassword.css";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Context/AuthContext";
-import { api } from "../../api/axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useOtpSender } from "../../hooks/usePasswordResetor";
 export const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-   const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
-
-  const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { mutate: otpSendMutate, isPending } = useOtpSender();
+
+  const [email, setEmail] = useState("");
+  const [failedMessage, setFailedMessage] = useState("");
+  const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
+
 
   //Change handler
   const handleOnChange = (e) => {
@@ -20,22 +20,19 @@ export const ForgotPassword = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    try {
-      setSendButtonDisabled(true)
-      const res = await api.post("auth/send-otp", {
-        email: email,
-      });
-      if (res) {
+
+    otpSendMutate(email, {
+      onSuccess: () => {
+        console.log("OTP Sent.");
         navigate(`/auth/verify-otp/${email}`);
-      }
-    } catch (error) {
-      setError(error.response.data.message || "Somthing went wrong!");
-      console.log(error.response.data.message || "Somthing went wrong!");
-    }
-    finally{
-      setSendButtonDisabled(false)
-    }
-    setEmail("");
+        setEmail("");
+        setFailedMessage("");
+      },
+
+      onError: () => {
+        setFailedMessage("OTP not send!");
+      },
+    });
   };
 
   return (
@@ -43,7 +40,7 @@ export const ForgotPassword = () => {
       <div className="fp-container">
         <span className="fp-text">Forgot Password ?</span>
         <form className="fp-form">
-          <span>{error}</span>
+          <span>{failedMessage}</span>
           <input
             type="text"
             className="fp-input"
@@ -51,7 +48,10 @@ export const ForgotPassword = () => {
             value={email}
             onChange={handleOnChange}
           />
-          <button className={`fp-send-btn ${sendButtonDisabled ? "fp-send-btn-disabled" : ""}`} onClick={handleOnSubmit} disabled={sendButtonDisabled}>
+          <button
+            className={`fp-send-btn ${isPending ? "fp-send-btn-disabled" : ""}`}
+            onClick={handleOnSubmit}
+            disabled={isPending}>
             Send OTP
           </button>
         </form>

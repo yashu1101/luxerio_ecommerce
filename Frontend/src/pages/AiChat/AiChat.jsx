@@ -3,42 +3,33 @@ import ReactMarkdown from "react-markdown";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./AiChat.css";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
-import { api } from "../../api/axios";
 import { useState } from "react";
-import { Loader } from "../../components/Loader/Loader";
 import { TypingLoader } from "../../components/TypingLoader/TypingLoader";
+import { useAiChat } from "../../hooks/useAiChat";
 export const AiChat = () => {
+
+  
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [failedMessage, setFailedMessage] = useState("");
   const [placeholder, setPlaceholder] = useState(true);
+
+  // useAIChat Hook
+  const { mutate: askAI, isPending } = useAiChat();
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    setPlaceholder(false);
-    try {
-      setLoading(true);
-      const res = await api.post("chat", {
-        AiQuestion: question,
-      });
 
-      setResponse(res.data?.AiAnswer);
-    } catch (error) {
-      console.log(error.response.data.message || "Somthing went wrong!");
-    } finally {
-      setLoading(false);
-    }
+    askAI(question, {
+      onSuccess: (data) => {
+        setResponse(data);
+        setPlaceholder(false);
+        setFailedMessage("");
+      },
+      onError: () => setFailedMessage("Try again!"),
+    });
   };
 
-  console.log(response);
-
-  // if (loading) {
-  //   return (
-  //     <div className="aichat-res">
-  //       <Loader height={"100px"}></Loader>
-  //     </div>
-  //   );
-  // }
   return (
     <div className="aichat-section">
       <div className="aichat-container">
@@ -46,11 +37,9 @@ export const AiChat = () => {
           {placeholder && (
             <div className="aichat-placeholder">
               <h1>What's in your mind ?</h1>
-              
             </div>
           )}
-          {loading ? (
-            // <Loader height={"100px"}></Loader>
+          {isPending ? (
             <TypingLoader> </TypingLoader>
           ) : (
             <ReactMarkdown>{response}</ReactMarkdown>

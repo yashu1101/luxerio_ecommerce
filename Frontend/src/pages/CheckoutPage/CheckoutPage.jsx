@@ -1,50 +1,67 @@
-import { Navbar } from "../../components/Navbar/Navbar";
+import "./CheckoutPage.css";
 import { OrderSummary } from "../../components/OrderSummary/OrderSummary";
 import { PaymentForm } from "../../components/PaymentForm/PaymentForm";
 import { AddressForm } from "../../components/AddressForm/AddressForm";
 import { CheckoutContext } from "../../Context/CheckoutContext";
 import { useContext, useEffect } from "react";
 import { useLocation, useParams, useNavigate } from "react-router-dom";
-import "./CheckoutPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCaretDown,
-  faCheck,
-  faCircleCheck,
-  faStar,
-} from "@fortawesome/free-solid-svg-icons";
-import { faCircle } from "@fortawesome/free-regular-svg-icons";
+import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { api } from "../../api/axios";
+import { useCreateCartOrder, useCreateOrder } from "../../hooks/useOrderAction";
 export const CheckoutPage = () => {
+  const { productId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-
-  const { productId } = useParams();
-
-  const {
-    message,
-    address,
-    paymentMethod,
-    createOrder,
-    createCartOrder,
-    isOrderCreated,
-  } = useContext(CheckoutContext);
+  const { address, paymentMethod } = useContext(CheckoutContext);
 
   const [addressContainer, setAddressContainer] = useState(false);
   const [paymentContainer, setPaymentContainer] = useState(false);
-
   const [isAddressDone, setIsAddressDone] = useState(false);
   const [isPaymentDone, setIsPaymentDone] = useState(false);
+  const [isOrderCreated, setIsOrderCreated] = useState(false);
+
+  const [isOrderFailed, setIsOrderFailed] = useState(false);
+
+  const { mutate: createOrderMutate, isPending: isOrderPending } =
+    useCreateOrder();
+  const { mutate: createCartOrderMutate, isPending: isCartOrderPending } =
+    useCreateCartOrder();
+
+  const handleCreateOrder = () => {
+    // CREATE SINGLE ORDER
+    if (productId) {
+      createOrderMutate(
+        { productId, address, paymentMethod },
+        {
+          onSuccess: () => {
+            setIsOrderCreated(true)
+            navigate("/myorders");
+          },
+        },
+      );
+    } else {
+      // CREATE CART ORDER
+      createCartOrderMutate(
+        { address, paymentMethod },
+        {
+          onSuccess: () => {
+            setIsOrderCreated(true)
+            navigate("/myorders");
+          },
+        },
+      );
+    }
+  };
 
   // redirect to myorders page after order created
-  useEffect(() => {
-    if (isOrderCreated) {
-      setTimeout(() => {
-        navigate("/myorders");
-      }, 2000);
-    }
-  }, [isOrderCreated, navigate]);
+  // useEffect(() => {
+  //   if (isOrderCreated) {
+  //     setTimeout(() => {
+  //       navigate("/myorders");
+  //     }, 2000);
+  //   }
+  // }, [isOrderCreated, navigate]);
 
   return (
     <>
@@ -122,11 +139,7 @@ export const CheckoutPage = () => {
               className={`checkout-order-place-wrapper ${!(isAddressDone && isPaymentDone) && "step-disabled"}`}>
               <button
                 className="checkout-order-place-button"
-                onClick={() => {
-                  productId
-                    ? createOrder(productId, address, paymentMethod)
-                    : createCartOrder(address, paymentMethod);
-                }}>
+                onClick={handleCreateOrder}>
                 Place Order
               </button>
             </div>

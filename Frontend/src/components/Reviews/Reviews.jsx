@@ -1,10 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./Reviews.css";
 import { faStar, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { api } from "../../api/axios";
-import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { AuthContext } from "../../Context/AuthContext";
+import { useState } from "react";
 import { useReviewAdd } from "../../hooks/useReviewAdd";
 import { useUser } from "../../hooks/useUser";
 export const Reviews = ({ reviews, productId }) => {

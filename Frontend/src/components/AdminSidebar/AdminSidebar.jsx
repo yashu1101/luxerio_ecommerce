@@ -2,17 +2,22 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./AdminSidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
-import { AuthContext } from "../../Context/AuthContext";
+import { useState } from "react";
 import { useUser } from "../../hooks/useUser";
 import { useLogout } from "../../hooks/useAuth";
-export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
- ;
+export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const { sidebarHideOnElementClick, setSidebarHideOnElementClick } =
     useState(false);
+  const navigate = useNavigate();
 
-    const {data: user} = useUser()
-    const {mutate: logoutMutate} = useLogout()
+  const { data: user } = useUser();
+  const { mutate: logoutMutate } = useLogout();
+
+  const handleLogout = () => {
+    logoutMutate({},{
+      onSuccess: ()=> navigate('/')
+    });
+  };
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -21,7 +26,6 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
     setSidebarHideOnElementClick(true);
   };
 
-  const navigate = useNavigate();
   const adminLogout = async () => {
     const result = await UserLogout();
     if (result.status) {
@@ -45,14 +49,12 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
           {user?.username || ""}
         </span>
         <span className="admin-sidebar-profile-role">Role: {user?.role}</span>
-        <span className="admin-sidebar-profile-logout" onClick={logoutMutate}>
+        <span className="admin-sidebar-profile-logout" onClick={handleLogout}>
           LOGOUT
         </span>
       </div>
       <ul className="admin-sidebar-list">
-        <li
-          className="admin-sidebar-list-element"
-          onClick={toggleSidebar}>
+        <li className="admin-sidebar-list-element" onClick={toggleSidebar}>
           <NavLink
             className={({ isActive }) =>
               `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
@@ -61,9 +63,7 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
             Dashboard
           </NavLink>
         </li>
-        <li
-          className="admin-sidebar-list-element"
-          onClick={toggleSidebar}>
+        <li className="admin-sidebar-list-element" onClick={toggleSidebar}>
           <NavLink
             className={({ isActive }) =>
               `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
@@ -72,9 +72,7 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
             Products
           </NavLink>
         </li>
-        <li
-          className="admin-sidebar-list-element"
-          onClick={toggleSidebar}>
+        <li className="admin-sidebar-list-element" onClick={toggleSidebar}>
           <NavLink
             className={({ isActive }) =>
               `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
@@ -83,9 +81,7 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
             Categories
           </NavLink>
         </li>
-        <li
-          className="admin-sidebar-list-element"
-          onClick={toggleSidebar}>
+        <li className="admin-sidebar-list-element" onClick={toggleSidebar}>
           <NavLink
             className={({ isActive }) =>
               `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`
@@ -94,9 +90,7 @@ export const AdminSidebar = ({ isSidebarOpen, setIsSidebarOpen, }) => {
             Orders
           </NavLink>
         </li>
-        <li
-          className="admin-sidebar-list-element"
-          onClick={toggleSidebar}>
+        <li className="admin-sidebar-list-element" onClick={toggleSidebar}>
           <NavLink
             className={({ isActive }) =>
               `admin-sidebar-navlinks ${isActive ? "admin-sidebar-navlinks-active" : ""}`

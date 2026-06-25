@@ -1,40 +1,37 @@
 import { useParams } from "react-router-dom";
 
 import { Card } from "../../components/Card/Card";
-import { useContext, useEffect } from "react";
-import { WishlistContext } from "../../Context/WishlistContext";
-import { CartContext } from "../../Context/CartContext";
-import { ProductContext } from "../../Context/ProductsContext";
 
 import "./Searches.css";
 
 import { Navbar } from "../../components/Navbar/Navbar";
+import { useProduct } from "../../hooks/useProduct";
+import { Loader } from "../../components/Loader/Loader";
 
 export const Searches = () => {
-  const {searchKeyword} = useParams()
-    const { products, getAllProduct} = useContext(ProductContext)
+  const { searchKeyword } = useParams();
 
-    useEffect(()=>{
-     
-      getAllProduct({search: searchKeyword})
-    },[searchKeyword])
+  const { data, isLoading, error } = useProduct({
+    search: searchKeyword,
+  });
 
-    
+  if(isLoading) return <Loader height={'100dvh'} ></Loader>
+
   return (
     <>
       <Navbar adaptive={false} allowSearch={true}></Navbar>
       <div className="searches-section">
         <div className="searches-title-bar">
-          {products?.length === 0 ? (
+          {data?.products?.length === 0 ? (
             <h1 className="searches-title">{`Showing 0 result for "${searchKeyword}".`}</h1>
           ) : (
-            <h1 className="searches-title">{`Showing ${products.length} result for '${searchKeyword}'.`}</h1>
+            <h1 className="searches-title">{`Showing ${data?.products.length} result for '${searchKeyword}'.`}</h1>
           )}
         </div>
         <div className="searches-container">
           <div className="searches">
-            {products?.length > 0 &&
-              products?.map((product) => {
+            {data?.products?.length > 0 &&
+              data?.products?.map((product) => {
                 return (
                   <div className="product" key={product?._id}>
                     <Card

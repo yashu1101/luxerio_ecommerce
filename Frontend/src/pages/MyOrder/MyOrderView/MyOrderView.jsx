@@ -1,51 +1,34 @@
-import React, { useEffect, useState } from "react";
+import "./MyOrderView.css";
 import { useParams, useNavigate } from "react-router-dom";
-import { api } from "../../../api/axios";
 import { Loader } from "../../../components/Loader/Loader";
 import { DateFormator } from "../../../utility/DateFormator";
-import "./MyOrderView.css";
+import { useOrderView } from "../../../hooks/useOrder";
+import { useCancelOrder } from "../../../hooks/useOrderAction";
 
 export const MyOrderView = () => {
-  const [orderData, setOrderData] = useState({});
-  const [loading, setLoading] = useState(false);
   const { orderId } = useParams();
 
-  // get order detail
-  const orderDetail = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get(`orders/view/${orderId}`);
-      setOrderData(res?.data?.order);
-    } catch (error) {
-      console.error(error.response?.data?.message || "Something went wrong!");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // VIEW ORDER
+  const { data, isLoading, error } = useOrderView(orderId);
 
-  useEffect(() => {
-    orderDetail();
-  }, [orderId]);
-
-  // cancel order
+  // CANCEL ORDER
+  const { mutate: cancelOrderMutate, isPending } = useCancelOrder();
 
   const navigate = useNavigate();
-  const cancelOrder = async () => {
-    try {
-      const res = await api.patch(`orders/cancel/${orderId}`);
-      console.log(res?.data?.message || "Order Cancelled.");
-      navigate("/myorders");
-    } catch (error) {
-      console.log(error.response.data.message || "Somthing went wrong!");
-    }
+  const cancelOrder = () => {
+    cancelOrderMutate(orderId, {
+      onSuccess: () => {
+        navigate("/myorders");
+      },
+    });
   };
-  // console.log(orderData);
+  // console.log(data);
 
   // first letter
-  const fullname = orderData?.user?.username;
+  const fullname = data?.user?.username;
   const first_letter = fullname?.split("")[0]?.toUpperCase();
 
-  if (loading) {
+  if (isLoading) {
     return <Loader></Loader>;
   }
   return (
@@ -55,31 +38,33 @@ export const MyOrderView = () => {
         <div className="od-header">
           <div>
             <span className="od-label">Order Details</span>
-            <h1 className="od-order-id">{orderData?._id || "N/A"}</h1>
+            <h1 className="od-order-id">{data?._id || "N/A"}</h1>
           </div>
 
           {/* ✅ status  */}
           <div className="od-status">
             <div
               className={`od-status-view ${
-                orderData?.status === "pending"
+                data?.status === "pending"
                   ? "status-pending"
-                  : orderData?.status === "shipped"
+                  : data?.status === "shipped"
                     ? "status-shipped"
-                    : orderData?.status === "delivered"
+                    : data?.status === "delivered"
                       ? "status-delivered"
-                      : orderData?.status === "cancelled"
+                      : data?.status === "cancelled"
                         ? "status-cancelled"
                         : ""
               } `}>
-              {orderData?.status || "N/A"}
+              {data?.status || "N/A"}
             </div>
-            {orderData?.status !== "cancelled" &&
-              orderData?.status !== "delivered" && (
-                <button onClick={cancelOrder} className="od-status-update">
-                  Cancel
-                </button>
-              )}
+            {data?.status !== "cancelled" && data?.status !== "delivered" && (
+              <button
+                disabled={isPending}
+                onClick={cancelOrder}
+                className="od-status-update">
+                Cancel
+              </button>
+            )}
           </div>
         </div>
 
@@ -89,8 +74,8 @@ export const MyOrderView = () => {
           <div className="od-card">
             <p className="od-card-title">Customer</p>
             <div className="od-avatar">{first_letter}</div>
-            <p className="od-user-name">{orderData?.user?.username}</p>
-            {/* <p className="od-user-email">{orderData?.user?.email}</p> */}
+            <p className="od-user-name">{data?.user?.username}</p>
+            {/* <p className="od-user-email">{data?.user?.email}</p> */}
           </div>
 
           {/* Timeline */}
@@ -102,9 +87,7 @@ export const MyOrderView = () => {
                 <div>
                   <p className="od-tl-label">Order Placed</p>
                   <p className="od-tl-value">
-                    {orderData?.createdAt
-                      ? DateFormator(orderData.createdAt)
-                      : "N/A"}
+                    {data?.createdAt ? DateFormator(data.createdAt) : "N/A"}
                   </p>
                 </div>
               </div>
@@ -114,8 +97,8 @@ export const MyOrderView = () => {
                 <div>
                   <p className="od-tl-label">Delivery Date</p>
                   <p className="od-tl-value">
-                    {orderData?.deliveryDate
-                      ? DateFormator(orderData.deliveryDate)
+                    {data?.deliveryDate
+                      ? DateFormator(data.deliveryDate)
                       : "N/A"}
                   </p>
                 </div>
@@ -130,9 +113,7 @@ export const MyOrderView = () => {
               <span className="od-info-icon">💳</span>
               <div>
                 <p className="od-tl-label">Payment Method</p>
-                <p className="od-tl-value">
-                  {orderData?.paymentMethod || "N/A"}
-                </p>
+                <p className="od-tl-value">{data?.paymentMethod || "N/A"}</p>
               </div>
             </div>
             <div className="od-divider" />
@@ -141,10 +122,10 @@ export const MyOrderView = () => {
               <div>
                 <p className="od-tl-label">Shipping Address</p>
                 <p className="od-tl-value od-address">
-                  {orderData?.address?.addressLine || "N/A"},{" "}
-                  {orderData?.address?.city || "N/A"},{" "}
-                  {orderData?.address?.state || "N/A"} -{" "}
-                  {orderData?.address?.pincode || "N/A"}
+                  {data?.address?.addressLine || "N/A"},{" "}
+                  {data?.address?.city || "N/A"},{" "}
+                  {data?.address?.state || "N/A"} -{" "}
+                  {data?.address?.pincode || "N/A"}
                 </p>
               </div>
             </div>
@@ -168,7 +149,7 @@ export const MyOrderView = () => {
               </thead>
               <tbody>
                 {/* replace these rows with your api data using .map() */}
-                {orderData?.items?.map((item, index) => {
+                {data?.items?.map((item, index) => {
                   return (
                     <tr key={item._id}>
                       <td className="od-td-num">{index + 1}</td>
@@ -195,9 +176,7 @@ export const MyOrderView = () => {
 
           <div className="od-total-row">
             <span className="od-total-label">Total Amount</span>
-            <span className="od-total-value">
-              ₹{orderData?.totalPrice || "N/A"}
-            </span>
+            <span className="od-total-value">₹{data?.totalPrice || "N/A"}</span>
           </div>
         </div>
       </div>
