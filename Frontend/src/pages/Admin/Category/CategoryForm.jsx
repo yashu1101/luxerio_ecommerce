@@ -1,11 +1,22 @@
 import React, { useState } from "react";
 import { api } from "../../../api/axios";
 import "./CategoryForm.css";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 export const CategoryForm = () => {
+
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     title: "",
     thumbnail: null,
+  });
+
+  // MUTATION FOR ADD CATEGORY
+  const { mutate: addCategoryMutate, isPending } = useMutation({
+    mutationFn: async (data) => {
+      const res = await api.post("categories", data);
+    },
   });
 
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
@@ -37,27 +48,24 @@ export const CategoryForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const data = new FormData();
+    const data = new FormData();
 
-      // text fields
-      data.append("title", formData.title);
-      data.append("thumbnail", formData.thumbnail);
+    // text fields
+    data.append("title", formData.title);
+    data.append("thumbnail", formData.thumbnail);
 
-      const res = await api.post("categories", data);
+    addCategoryMutate(data, {
+      onSuccess: () => {
+        navigate("/admin/categories");
+      },
+    });
+    
+    setFormData({
+      title: "",
+      thumbnail: null,
+    });
 
-      console.log(res.data.message);
-
-      // reset after success
-      setFormData({
-        title: "",
-        thumbnail: null,
-      });
-
-      setThumbnailPreview(null);
-    } catch (error) {
-      console.log(error?.response?.data?.message || "Something went wrong!");
-    }
+    setThumbnailPreview(null);
   };
 
   return (
@@ -104,8 +112,7 @@ export const CategoryForm = () => {
             <button
               type="reset"
               className="cf-reset-btn"
-              onClick={() => setThumbnailPreview(null)}
-            >
+              onClick={() => setThumbnailPreview(null)}>
               Reset
             </button>
           </div>

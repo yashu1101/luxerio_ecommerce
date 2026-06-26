@@ -1,6 +1,7 @@
 import { api } from "../api/axios";
 import { useQuery } from "@tanstack/react-query";
 
+// FETCH PRODUCTS
 export const useProduct = ({
   search = "",
   categoryName = "",
@@ -32,5 +33,18 @@ export const useProduct = ({
     queryFn: getAllProduct,
     staleTime: 60 * 1000 * 5,
     placeholderData: (previousData) => previousData,
+  });
+};
+
+// FETCH SINGLE PRODUCTS
+export const useSingleProduct = (productId, enabled) => {
+  return useQuery({
+    queryKey: ["singleProduct", productId],
+    queryFn: async () => {
+      const res = await api.get(`products/${productId}`);
+      return res.data;
+    },
+
+    enabled: enabled && !!productId,
   });
 };

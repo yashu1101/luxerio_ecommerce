@@ -35,7 +35,7 @@ export const CheckoutPage = () => {
         { productId, address, paymentMethod },
         {
           onSuccess: () => {
-            setIsOrderCreated(true)
+            setIsOrderCreated(true);
             navigate("/myorders");
           },
         },
@@ -46,7 +46,7 @@ export const CheckoutPage = () => {
         { address, paymentMethod },
         {
           onSuccess: () => {
-            setIsOrderCreated(true)
+            setIsOrderCreated(true);
             navigate("/myorders");
           },
         },

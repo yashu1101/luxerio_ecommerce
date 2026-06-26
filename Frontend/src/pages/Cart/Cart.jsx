@@ -1,7 +1,7 @@
 import "./Cart.css";
 import { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 // import { CartContext } from "../../Context/CartContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ import {
   useIncreaseCart,
 } from "../../hooks/useCartAction";
 import { AppAnimation } from "../../components/Animations/AppAnimation";
+import { Empty } from "../../components/Empty/Empty";
 
 export const Cart = () => {
   const navigate = useNavigate();
@@ -45,80 +46,78 @@ export const Cart = () => {
 
   if (isLoading) return <Loader height="100dvh" />;
 
+  // ic cart is empty
+  if (!data || data.length === 0)
+    return <Empty height={"100dvh"} title={"No item in cart"} to={"/"}></Empty>;
+
   return (
     <>
       <AppAnimation>
         <div className="cart-section">
           <div className="cart-item-container">
             <div className="cart-heading-container">
-              {data && data.length > 0 ? (
-                <h3 className="cart-heading">Cart Items</h3>
-              ) : (
-                <div className="cart-empty-text-container">
-                  <span className="cart-empty-text">Your cart is empty.</span>
-                  <Link to={"/"} className="shopnow-text">
-                    Shop Now
-                  </Link>
-                </div>
-              )}
+              <h3 className="cart-heading">Cart Items</h3>
             </div>
 
-            {data?.map((item) => {
-              return (
-                <motion.div
-                  className="cart-item"
-                  key={item._id}
-                  initial={{ opacity: 0, translateX: -50 }}
-                  animate={{ opacity: 1, translateX: 0 }}
-                  exit={{ opacity: 0, translateX: 50 }}
-                  transition={{ duration: 0.3, ease: "easeIn" }}>
-                  <FontAwesomeIcon
-                    className="cart-item-remove-btn"
-                    icon={faXmark}
-                    onClick={() => {
-                      deleteCartMutate(item.product._id);
-                    }}></FontAwesomeIcon>
-                  <div className="cart-item-img-container">
-                    <img
-                      className="cart-item-img"
-                      src={item?.product.thumbnail}
-                      alt="cart item"
-                    />
-                  </div>
-                  <div className="cart-item-detail">
-                    <span className="cart-item-title">
-                      {item?.product?.title}
-                    </span>
-                    <span className="cart-item-brand">
-                      {item?.product?.brand}
-                    </span>
-                    <span className="cart-item-price">
-                      {" "}
-                      Total Price: ₹
-                      {(item?.product?.price * item.quantity).toFixed(2)}{" "}
-                    </span>
-
-                    <div className="cart-item-quantity-container ">
-                      <FontAwesomeIcon
-                        icon={faMinus}
-                        className={`cart-item-decrease ${decreaseCartPending ? "cart-item-quantity-disabled" : ""}`}
-                        onClick={() => {
-                          decreaseCartMutate(item.product._id);
-                        }}></FontAwesomeIcon>
-                      <span className="cart-item-quantity-value">
-                        Q : {item.quantity}
-                      </span>
-                      <FontAwesomeIcon
-                        icon={faPlus}
-                        className={`cart-item-increase ${increaseCartPending ? "cart-item-quantity-disabled" : ""}`}
-                        onClick={() => {
-                          increaseCartMutate(item.product._id);
-                        }}></FontAwesomeIcon>
+            <AnimatePresence>
+              {data?.map((item) => {
+                return (
+                  <motion.div
+                    className="cart-item"
+                    key={item._id}
+                    layout
+                    initial={{ opacity: 0, translateX: -50 }}
+                    animate={{ opacity: 1, translateX: 0 }}
+                    exit={{ opacity: 0, translateX: 50 }}
+                    transition={{ duration: 0.3, ease: "easeIn" }}>
+                    <FontAwesomeIcon
+                      className="cart-item-remove-btn"
+                      icon={faXmark}
+                      onClick={() => {
+                        deleteCartMutate(item.product._id);
+                      }}></FontAwesomeIcon>
+                    <div className="cart-item-img-container">
+                      <img
+                        className="cart-item-img"
+                        src={item?.product.thumbnail}
+                        alt="cart item"
+                      />
                     </div>
-                  </div>
-                </motion.div>
-              );
-            })}
+                    <div className="cart-item-detail">
+                      <span className="cart-item-title">
+                        {item?.product?.title}
+                      </span>
+                      <span className="cart-item-brand">
+                        {item?.product?.brand}
+                      </span>
+                      <span className="cart-item-price">
+                        {" "}
+                        Total Price: ₹
+                        {(item?.product?.price * item.quantity).toFixed(2)}{" "}
+                      </span>
+
+                      <div className="cart-item-quantity-container ">
+                        <FontAwesomeIcon
+                          icon={faMinus}
+                          className={`cart-item-decrease ${decreaseCartPending ? "cart-item-quantity-disabled" : ""}`}
+                          onClick={() => {
+                            decreaseCartMutate(item.product._id);
+                          }}></FontAwesomeIcon>
+                        <span className="cart-item-quantity-value">
+                          Q : {item.quantity}
+                        </span>
+                        <FontAwesomeIcon
+                          icon={faPlus}
+                          className={`cart-item-increase ${increaseCartPending ? "cart-item-quantity-disabled" : ""}`}
+                          onClick={() => {
+                            increaseCartMutate(item.product._id);
+                          }}></FontAwesomeIcon>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
           </div>
           {data && data.length > 0 && (
             <div className="cart-place-btn-container">

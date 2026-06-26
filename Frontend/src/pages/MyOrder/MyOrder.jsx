@@ -4,11 +4,11 @@ import "./MyOrder.css";
 import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
 import { useOrderSingle } from "../../hooks/useOrder";
-import {useUser} from '../../hooks/useUser'
+import { useUser } from "../../hooks/useUser";
+import { Empty } from "../../components/Empty/Empty";
 
 export const MyOrder = () => {
-
-  const {data: userData, isLoading: userLoading}  = useUser()
+  const { data: userData, isLoading: userLoading } = useUser();
 
   const { data, isLoading, erorr } = useOrderSingle();
 
@@ -24,6 +24,9 @@ export const MyOrder = () => {
   if (isLoading) {
     return <Loader height={"100dvh"}></Loader>;
   }
+
+  if (!data || data.length === 0)
+    return <Empty height={"100dvh"} title={"No any order"} to={"/"}></Empty>;
 
   return (
     <div className="myorder-section">

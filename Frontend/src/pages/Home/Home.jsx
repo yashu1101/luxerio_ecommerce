@@ -12,6 +12,7 @@ import image4 from "../../assets/carousel/image4.webp";
 import image5 from "../../assets/carousel/image5.webp";
 import image6 from "../../assets/carousel/image6.webp";
 import { AppAnimation } from "../../components/Animations/AppAnimation";
+import { Empty } from "../../components/Empty/Empty";
 
 export const Home = () => {
   return (
@@ -35,6 +36,8 @@ export const Home = () => {
           title={"Gaming laptops"}
           category="laptop"
           to="/category/laptop"></Slider>
+
+          {/* <Empty height={'500px'} title={'No item in cart'} to={'/'} ></Empty> */}
 
         <Footer></Footer>
       </AppAnimation>

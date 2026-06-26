@@ -37,8 +37,8 @@ export const useCreateCartOrder = () => {
     },
     onSuccess: (data) => {
       console.log(data?.message || "Order created.");
-      queryClient.invalidateQueries({ queryKey: ["order"] });
       queryClient.invalidateQueries({ queryKey: ["cart"] });
+      queryClient.invalidateQueries({ queryKey: ["order"] });
     },
     onError: (error) =>
       console.log(error?.response?.data?.message || "Something went wrong!"),
@@ -53,11 +53,12 @@ export const useCancelOrder = () => {
       const res = await api.patch(`orders/cancel/${orderId}`);
       return res?.data;
     },
-    onSuccess: (data,variables) => {
+    onSuccess: (data, variables) => {
       console.log(data?.message || "Order cancelled.");
       queryClient.invalidateQueries({ queryKey: ["order"] });
-      queryClient.invalidateQueries({ queryKey: ["viewOrder", variables.orderId ]});
-  
+      queryClient.invalidateQueries({
+        queryKey: ["viewOrder", variables.orderId],
+      });
     },
     onError: (error) =>
       console.log(error?.response?.data?.message || "Something went wrong!"),
@@ -75,10 +76,12 @@ export const useUpdateOrderStatus = () => {
       });
       return res?.data;
     },
-    onSuccess: (data,variables) => {
+    onSuccess: (data, variables) => {
       console.log(data?.message || "Order status updated.");
-      queryClient.invalidateQueries({ queryKey: ["viewOrder", variables.orderId ]});
-      queryClient.invalidateQueries({ queryKey: ['orderAll'] });
+      queryClient.invalidateQueries({
+        queryKey: ["viewOrder", variables.orderId],
+      });
+      queryClient.invalidateQueries({ queryKey: ["orderAll"] });
     },
     onError: (error) =>
       console.log(error?.response?.data?.message || "Something went wrong!"),

@@ -22,8 +22,8 @@ export const AiChat = () => {
 
     askAI(question, {
       onSuccess: (data) => {
-        setResponse(data);
         setPlaceholder(false);
+        setResponse(data);
         setFailedMessage("");
       },
       onError: () => setFailedMessage("Try again!"),

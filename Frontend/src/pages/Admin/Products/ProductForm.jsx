@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./ProductForm.css";
-import { api } from "../../../api/axios";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  useAddProduct,
-  useUpdateProduct,
-} from "../../../hooks/useProductAction";
+import { useAddProduct, useUpdateProduct } from "../../../hooks/useProductAction";
 import { useCategory } from "../../../hooks/useCategory";
-import { useProduct } from "../../../hooks/useProduct";
+import { useProduct, useSingleProduct } from "../../../hooks/useProduct";
 
 export const ProductForm = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const isEditMode = !!productId;
 
+  // ADD, UPDATE AND DELETE PRODUCT HOOK
   const { mutate: addProductMutate, isPending: addProductPending } =
     useAddProduct();
   const { mutate: updateProductMutate, isPending: updateProductPending } =
     useUpdateProduct();
+
+  // FETCH PRODUCTS AND CATEGORIES
   const { data: categories } = useCategory();
-  const { data: products } = useProduct();
+  const { data: products } = useProduct({
+    search: "",
+  });
+  const { data: product, isLoading: isProductLoading } = useSingleProduct(
+    productId,
+    isEditMode,
+  );
 
   const [formData, setFormData] = useState({
     title: "",
@@ -35,41 +40,28 @@ export const ProductForm = () => {
   });
 
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
-  // const [categories, setCategories] = useState([]);
 
-  // Fetch Categories
-
-  // Fetch Product (Edit Mode)
+  // FETCH PRODUCT (Edit Mode)
   useEffect(() => {
-    if (isEditMode) {
-      const fetchProduct = async () => {
-        try {
-          const res = await api.get(`products/${productId}`);
-          const product = res.data;
+    if (product) {
+      setFormData({
+        title: product?.title || "",
+        thumbnail: null,
+        brand: product?.brand || "",
+        price: product?.price || "",
+        category: product?.category?._id || product?.category || "",
+        color: product?.color || "",
+        stock: product?.stock || "",
+        rating: product?.rating || "",
+        description: product?.description || "",
+        specifications: product?.specifications || [],
+      });
 
-          setFormData({
-            title: product?.title || "",
-            thumbnail: null,
-            brand: product?.brand || "",
-            price: product?.price || "",
-            category: product?.category || "",
-            color: product?.color || "",
-            stock: product?.stock || "",
-            rating: product?.rating || "",
-            description: product?.description || "",
-            specifications: product?.specifications || [],
-          });
-
-          setThumbnailPreview(product?.thumbnail);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      fetchProduct();
+      setThumbnailPreview(product?.thumbnail);
     }
-  }, [productId, isEditMode]);
+  }, [product]);
 
-  // Handlers
+  //HANDLERS
   const handleInputChange = (e) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -78,7 +70,7 @@ export const ProductForm = () => {
     }));
   };
 
-  // --- Specifications Start ---
+  //  ADD SPECIFICATION
   const addSpecification = () => {
     setFormData((prev) => ({
       ...prev,
@@ -96,8 +88,8 @@ export const ProductForm = () => {
     const updatedSpecs = formData.specifications.filter((_, i) => i !== index);
     setFormData((prev) => ({ ...prev, specifications: updatedSpecs }));
   };
-  // --- Specifications End ---
 
+  // HANDLE IMAGE
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -107,34 +99,40 @@ export const ProductForm = () => {
     reader.readAsDataURL(file);
   };
 
+  // HANDLE FORM
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const data = new FormData();
-      // Append basic fields
-      Object.keys(formData).forEach((key) => {
-        if (key !== "specifications" && key !== "thumbnail") {
-          data.append(key, formData[key]);
-        }
+
+    const data = new FormData();
+    // Append basic fields
+    Object.keys(formData).forEach((key) => {
+      if (key !== "specifications" && key !== "thumbnail") {
+        data.append(key, formData[key]);
+      }
+    });
+
+    // convert specification to stringify
+    data.append("specifications", JSON.stringify(formData.specifications));
+
+    if (formData.thumbnail) {
+      data.append("thumbnail", formData.thumbnail);
+    }
+
+    if (isEditMode) {
+      updateProductMutate(
+        { productId: productId, updateData: data },
+        {
+          onSuccess: () => {
+            navigate("/admin/products");
+          },
+        },
+      );
+    } else {
+      addProductMutate(data, {
+        onSuccess: () => {
+          navigate("/admin");
+        },
       });
-
-      // convert specification to stringify
-      data.append("specifications", JSON.stringify(formData.specifications));
-
-      if (formData.thumbnail) {
-        data.append("thumbnail", formData.thumbnail);
-      }
-
-      if (isEditMode) {
-        // await api.put(`products/${productId}`, data);
-        updateProductMutate({ productId: productId, updateData: data });
-      } else {
-        // await api.post("products", data);
-        addProductMutate({ productData: data });
-      }
-      navigate("/admin");
-    } catch (error) {
-      console.log(error?.response?.data?.message);
     }
   };
 
