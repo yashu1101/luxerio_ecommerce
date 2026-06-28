@@ -1,5 +1,4 @@
 import { createContext, useState } from "react";
-import { api } from "../api/axios";
 export const ProductContext = createContext();
 export const ProductProvider = ({ children }) => {
   // pagiantion filter
@@ -12,21 +11,6 @@ export const ProductProvider = ({ children }) => {
   const [checkedBrands, setCheckedBrands] = useState([]);
   const [checkedColors, setCheckedColors] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState("");
-
-  // // update product
-  // const updateProduct = async (productId) => {
-  //   const res = await api.put(`products/${productId}`);
-  //   setMessage(res?.data?.message);
-  // };
-  // // delete product
-  // const deleteProduct = async (productId) => {
-  //   try {
-  //     const res = await api.delete(`products/${productId}`);
-  //     setMessage(res?.data?.message);
-  //   } catch (error) {
-  //     setError(error.response.data.message || "Somthing went wrongh!");
-  //   }
-  // };
 
   return (
     <ProductContext.Provider

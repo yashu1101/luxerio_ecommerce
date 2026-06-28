@@ -5,6 +5,7 @@ import { Protect } from "../middleware/protect.middleware.js";
 
 const route = Router()
 route.post('/api/cart', Protect, addCartItem)
+
 route.get('/api/cart', Protect, getDataFromCart)
 route.put('/api/cart/increase/:productId', Protect, increaseCartQuantity)
 route.put('/api/cart/decrease/:productId', Protect, decreaseCartQuantity)

@@ -1,7 +1,6 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./MyOrder.css";
-import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
 import { useOrderSingle } from "../../hooks/useOrder";
 import { useUser } from "../../hooks/useUser";

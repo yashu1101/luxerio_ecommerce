@@ -2,12 +2,8 @@ import { Outlet } from "react-router-dom";
 import { AdminSidebar } from "../components/AdminSidebar/AdminSidebar";
 import "./AdminLayout.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBarsStaggered,
-  faHamburger,
-} from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
-import { AuthContext } from "../Context/AuthContext";
+import { faBarsStaggered } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 import { AccessDenied } from "../pages";
 import { Loader } from "../components/Loader/Loader";
 import { useUser } from "../hooks/useUser";

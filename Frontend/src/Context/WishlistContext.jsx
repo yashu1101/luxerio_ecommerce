@@ -1,42 +1,42 @@
-import { createContext, useState } from "react";
-import { api } from "../api/axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+// import { createContext, useState } from "react";
+// import { api } from "../api/axios";
+// import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const WishlistContext = createContext();
+// export const WishlistContext = createContext();
 
-export const WishlistProvider = ({ children }) => {
-  const [message, setMessage] = useState("");
-  const queryClinet = useQueryClient();
+// export const WishlistProvider = ({ children }) => {
+//   const [message, setMessage] = useState("");
+//   const queryClinet = useQueryClient();
 
  
-  // Remove wishlist item
+//   // Remove wishlist item
 
-  const { mutate: removeWishlistItem } = useMutation({
-    mutationFn: async (productId) => {
-      const res = await api.delete(`wishlist/${productId}`);
-      return res?.data?.message;
-    },
+//   const { mutate: removeWishlistItem } = useMutation({
+//     mutationFn: async (productId) => {
+//       const res = await api.delete(`wishlist/${productId}`);
+//       return res?.data?.message;
+//     },
 
-    onSuccess: (data) => {
-      queryClinet.invalidateQueries({ queryKey: ["wishlist"] });
-      console.log(data);
-    },
-    onError: (error) => {
-      console.log(erorr);
-    },
-  });
+//     onSuccess: (data) => {
+//       queryClinet.invalidateQueries({ queryKey: ["wishlist"] });
+//       console.log(data);
+//     },
+//     onError: (error) => {
+//       console.log(erorr);
+//     },
+//   });
 
-  return (
-    <WishlistContext.Provider
-      value={{
+//   return (
+//     <WishlistContext.Provider
+//       value={{
       
       
      
-        removeWishlistItem,
-        message,
+//         removeWishlistItem,
+//         message,
    
-      }}>
-      {children}
-    </WishlistContext.Provider>
-  );
-};
+//       }}>
+//       {children}
+//     </WishlistContext.Provider>
+//   );
+// };

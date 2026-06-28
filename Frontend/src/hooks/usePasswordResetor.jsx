@@ -5,9 +5,9 @@ import { api } from "../api/axios";
 
 export const useOtpSender = () => {
   return useMutation({
-    mutationFn: async (email) => {
+    mutationFn: async ({ email }) => {
       const res = await api.post("auth/send-otp", {
-        email: email,
+        email,
       });
 
       return res?.data;
@@ -21,8 +21,6 @@ export const useOtpSender = () => {
     },
   });
 };
-
-
 
 // OTP VERIFY HOOK
 
@@ -45,8 +43,6 @@ export const useOtpVerifier = () => {
     },
   });
 };
-
-
 
 // RESET PASSWORD HOOK
 

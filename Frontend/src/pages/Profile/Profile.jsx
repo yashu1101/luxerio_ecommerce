@@ -1,29 +1,28 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import "./Profile.css";
-import { AuthContext } from "../../Context/AuthContext";
+import { useUser } from "../../hooks/useUser";
 import { DateFormator } from "../../utility/DateFormator";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "../../components/Loader/Loader";
 
 export const Profile = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { data: user, isLoading } = useUser();
 
   const navigate = useNavigate();
-   // Redirect to login page if user not logged In.
- 
-   useEffect(() => {
-     if (!loading && !user) {
-       navigate("/auth/login", { replace: true });
-     }
-   }, [user, loading, navigate]);
+  // Redirect to login page if user not logged In.
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      navigate("/auth/login", { replace: true });
+    }
+  }, [user, isLoading, navigate]);
 
   const name = user?.username || "N/A";
   const email = user?.email || "N/A";
   const createdAt = DateFormator(user?.createdAt);
   const avtar = user?.username.split("")[0].toUpperCase();
 
-
-  if(loading) return <Loader height={'100vh'} ></Loader>
+  if (isLoading) return <Loader height={"100vh"}></Loader>;
 
   return (
     <div className="profile-container">

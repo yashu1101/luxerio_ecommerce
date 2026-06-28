@@ -55,10 +55,11 @@ export const addCartItem = async (req, res) => {
     }
 };
 
+
 // controller for get data from cart
 export const getDataFromCart = async (req, res) => {
     try {
-    
+
         const cartData = await Cart
             .findOne({ user: req.user._id })
             .populate("products.product");

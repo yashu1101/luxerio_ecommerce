@@ -1,9 +1,8 @@
-// import dotenv from 'dotenv'
-// dotenv.config()
+
 import { GoogleGenAI } from "@google/genai";
 export const Chat = async (req, res) => {
 
-    console.log(process.env.CHAT_SECRET_KEY)
+    
     try {
         const { AiQuestion } = req.body;
         const ai = new GoogleGenAI({ apiKey: process.env.CHAT_SECRET_KEY });
@@ -12,17 +11,18 @@ export const Chat = async (req, res) => {
             contents: AiQuestion,
         });
 
-        res.status(200).json({ 
+        res.status(200).json({
             AiAnswer: response.text
         })
-        // console.log(response.text);
-        console.log(response);
+
+
 
     } catch (error) {
-        console.log(error.message)
+
+        res.status(500).json({ message: error.message })
     }
 
 
 }
 
-Chat()
+// Chat()

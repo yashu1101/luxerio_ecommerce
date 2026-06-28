@@ -19,12 +19,13 @@ export const AiChat = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    setPlaceholder(false);
+    setFailedMessage("");
 
     askAI(question, {
       onSuccess: (data) => {
-        setPlaceholder(false);
         setResponse(data);
-        setFailedMessage("");
+        
       },
       onError: () => setFailedMessage("Try again!"),
     });

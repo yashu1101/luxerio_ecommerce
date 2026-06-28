@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { useState } from "react";
 
-
 import "./Card.css";
 import {
   faCartShopping,
@@ -11,6 +10,9 @@ import {
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
 import { Placeholder } from "../Placeholder/Placeholder";
+
+import { useCart } from "../../hooks/useCart";
+import { useWishlist } from "../../hooks/useWishlist";
 import { useAddWishlist } from "../../hooks/useWishlistAction";
 import { useAddCart } from "../../hooks/useCartAction";
 export const Card = ({
@@ -23,15 +25,32 @@ export const Card = ({
   wishlist,
   cart,
 }) => {
+  const { data: cartItem } = useCart();
+  const { data: wishlistItem } = useWishlist();
+
+  // GET CART ITEM ID
+  const cartItemId = cartItem?.map((item) => item?.product?._id);
+  const isCartItemAdded = cartItemId?.includes(cart);
+
+  // GET WISHLIST ITEM ID
+  const wishlistItemId = wishlistItem?.map((item) => item?._id);
+  const isWishlistItemAdded = wishlistItemId?.includes(wishlist);
+
+  // ADD TO WISHLIST MUTATE
+
   const {
     mutate: AddToWishlistMutate,
-    isPending,
+    isPending: isAddWishlistPending,
     error: wishlistError,
   } = useAddWishlist();
 
-  const { mutate: AddCartMutate, error: cartError } = useAddCart();
+  // ADD TO CART MUTATE
+  const {
+    mutate: AddCartMutate,
+    isPending: isAddCartPending,
+    error: cartError,
+  } = useAddCart();
 
-  // const { AddToCart, isInCart } = useContext(CartContext);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   return (
     <>
@@ -39,7 +58,7 @@ export const Card = ({
       <div className="card">
         <FontAwesomeIcon
           onClick={() => AddToWishlistMutate(wishlist)}
-          className="card-wishlist-btn-icon-mobile"
+          className={`card-wishlist-btn-icon-mobile ${isWishlistItemAdded && "card-wishlist-btn-icon-active"}`}
           icon={faHeart}></FontAwesomeIcon>
 
         <Link to={`/view/${productId}`} className="card-image-container">
@@ -77,7 +96,7 @@ export const Card = ({
         <div className="card-overlay">
           <button className="card-wishlist-btn">
             <FontAwesomeIcon
-              className={`card-wishlist-btn-icon  ${"card-wishlist-btn-icon-active"} `}
+              className={`card-wishlist-btn-icon  ${isWishlistItemAdded && "card-wishlist-btn-icon-active"} `}
               onClick={() => AddToWishlistMutate(wishlist)}
               icon={faHeart}></FontAwesomeIcon>
           </button>
@@ -85,7 +104,7 @@ export const Card = ({
           <button className="card-cart-btn">
             <FontAwesomeIcon
               onClick={() => AddCartMutate(cart)}
-              className={`card-cart-btn-icon  ${"card-cart-btn-icon-active"} `}
+              className={`card-cart-btn-icon  ${isCartItemAdded && "card-cart-btn-icon-active"} `}
               icon={faCartShopping}></FontAwesomeIcon>
           </button>
         </div>

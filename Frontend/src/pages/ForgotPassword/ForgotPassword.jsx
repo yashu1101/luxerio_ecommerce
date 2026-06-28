@@ -10,29 +10,33 @@ export const ForgotPassword = () => {
   const [failedMessage, setFailedMessage] = useState("");
   const [sendButtonDisabled, setSendButtonDisabled] = useState(false);
 
-
   //Change handler
   const handleOnChange = (e) => {
     setEmail(e.target.value);
   };
 
+  console.log(isPending)
   //Form handler
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
+    console.log(email);
 
-    otpSendMutate(email, {
-      onSuccess: () => {
-        console.log("OTP Sent.");
-        navigate(`/auth/verify-otp/${email}`);
-        setEmail("");
-        setFailedMessage("");
-      },
+    setFailedMessage("");
+    otpSendMutate(
+      { email: email },
+      {
+        onSuccess: () => {
+          console.log("OTP Sent.");
+          navigate(`/auth/verify-otp/${email}`);
+          setEmail("");
+        },
 
-      onError: () => {
-        setFailedMessage("OTP not send!");
+        onError: () => {
+          setFailedMessage("OTP not send!");
+        },
       },
-    });
+    );
   };
 
   return (

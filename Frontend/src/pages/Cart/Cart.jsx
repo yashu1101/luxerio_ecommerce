@@ -1,12 +1,11 @@
 import "./Cart.css";
-import { useContext, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 // import { CartContext } from "../../Context/CartContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMinus, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { AuthContext } from "../../Context/AuthContext";
 import { Loader } from "../../components/Loader/Loader";
 import { useCart } from "../../hooks/useCart";
 import {
@@ -16,10 +15,11 @@ import {
 } from "../../hooks/useCartAction";
 import { AppAnimation } from "../../components/Animations/AppAnimation";
 import { Empty } from "../../components/Empty/Empty";
+import { useUser } from "../../hooks/useUser";
 
 export const Cart = () => {
   const navigate = useNavigate();
-  const { user, loading } = useContext(AuthContext);
+  const { data: user, isLoading: isUserLoading } = useUser();
 
   const { data, isLoading, error } = useCart();
   const { mutate: deleteCartMutate, isPending: deleteCartPending } =
@@ -33,10 +33,10 @@ export const Cart = () => {
 
   // Redirect to login page if user not logged In.
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isUserLoading && !user) {
       navigate("/auth/login", { replace: true });
     }
-  }, [user, loading, navigate]);
+  }, [user, isUserLoading, navigate]);
 
   const placeOrder = () => {
     navigate("/checkout");

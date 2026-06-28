@@ -20,9 +20,9 @@
   width: 100%;
 }
 
-.card-placeholder{
-    position: relative;
-    height: 180px;
+.card-placeholder {
+  position: relative;
+  height: 180px;
 }
 
 .card-details {
@@ -159,12 +159,14 @@
 
   .card-wishlist-btn-icon-mobile {
     display: block;
+    color: rgba(180, 180, 180, 0.353);
+  }
+  .card-wishlist-btn-icon-active {
+    color: var(--primary-color);
   }
 }
 @media (max-width: 480px) {
- .card-placeholder{
+  .card-placeholder {
     height: 150px;
+  }
 }
-}
-
-

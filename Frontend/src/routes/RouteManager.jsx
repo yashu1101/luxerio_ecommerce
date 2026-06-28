@@ -27,6 +27,7 @@ import {
   ResetPassword,
   ForgotPassword,
   Profile,
+  NotFound,
 } from "../pages";
 import { AnimatePresence } from "framer-motion";
 import { useLocation } from "react-router-dom";
@@ -91,6 +92,10 @@ export const RouteManager = () => {
             <Route path="orders/:orderId" element={<OrderDetail />} />
             <Route path="users" element={<Users />} />
           </Route>
+
+          {/* 404 page route */}
+
+          <Route path="*" element={<NotFound></NotFound>} ></Route>
         </Routes>
       </AnimatePresence>
     </>

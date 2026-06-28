@@ -35,3 +35,7 @@ export { Users } from './Admin/Users/Users'
 
 // Access denied page
 export { AccessDenied } from './AccessDenied/AccessDenied'
+
+// 404 Page
+
+export {NotFound} from './NotFound/NotFound'

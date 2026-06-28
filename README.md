@@ -67,6 +67,7 @@ The goal of this project was to build a realistic ecommerce platform while learn
 - React.js
 - React Router DOM
 - Axios
+- TanStack Query
 - CSS
 
 ### Backend
