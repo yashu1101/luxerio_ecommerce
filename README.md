@@ -24,7 +24,6 @@ The goal of this project was to build a realistic ecommerce platform while learn
 - Profile Page
 - Forgot Password
 - OTP Based Password Reset
-- Change Password
 - AI Chat Support
 
 ---
@@ -87,7 +86,7 @@ The goal of this project was to build a realistic ecommerce platform while learn
 ### External Services
 
 - Gemini API
-- Nodemailer ( with gmail)
+- Resend (for mail service)
 - Cloudinary (for photo upload)
 
 ---
