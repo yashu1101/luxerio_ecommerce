@@ -169,7 +169,7 @@ export const sendOTP = async (req, res) => {
             100000 + Math.random() * 900000
         ).toString();
 
-        transporter.sendMail({
+        await transporter.sendMail({
 
 
             from: `"Luxerio Support" <${process.env.APP_USER}>`,
@@ -179,7 +179,7 @@ export const sendOTP = async (req, res) => {
             subject: "Reset Password OTP",
             text: `Your OTP for password reset is: ${generatedOtp}. It is valid for 10 minutes.`
 
-        }).catch(error => console.log(error.message || "OTP could not send. Try again"));
+        }).catch(error => console.log(error.message))
 
         await OTP.deleteMany({ email });
 
