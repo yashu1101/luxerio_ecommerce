@@ -64,14 +64,14 @@ export const getDataFromCart = async (req, res) => {
             .findOne({ user: req.user._id })
             .populate("products.product");
 
-        if (!cartData || cartData.products.length === 0) {
+        if (!cartData || cartData?.products?.length === 0) {
             return res.status(404).json({
                 message: "No items in cart."
             });
         }
 
         res.status(200).json({
-            products: cartData.products
+            products: cartData?.products
         });
 
     } catch (error) {
