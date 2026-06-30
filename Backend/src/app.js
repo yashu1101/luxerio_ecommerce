@@ -18,7 +18,7 @@ import { dashboardRoute } from './routes/dashboard.route.js'
 
 
 const app = express()
-app.set('trust proxy', 1);
+
 
 
 

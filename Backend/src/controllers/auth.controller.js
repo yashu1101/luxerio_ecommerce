@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 import { User } from "../models/user.model.js";
 import { registerSchema, loginSchema, passwordSchema } from '../validations/auth.validation.js';
-import { transporter } from '../services/mailer.service.js';
+import { ResendMail } from '../services/mailer.service.js';
 import { OTP } from '../models/otp.model.js';
 
 
@@ -169,17 +169,9 @@ export const sendOTP = async (req, res) => {
             100000 + Math.random() * 900000
         ).toString();
 
-        await transporter.sendMail({
 
 
-            from: `"Luxerio Support" <${process.env.APP_USER}>`,
-
-            to: email,
-
-            subject: "Reset Password OTP",
-            text: `Your OTP for password reset is: ${generatedOtp}. It is valid for 10 minutes.`
-
-        }).catch(error => console.log(error.message))
+        await ResendMail({ to: email, message: generatedOtp })
 
         await OTP.deleteMany({ email });
 
